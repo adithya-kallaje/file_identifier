@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 
 magic_numbers = {
     b'\x89\x50\x4e\x47\x0d\x0a\x1a\x0a': 'png',
@@ -25,9 +26,10 @@ def check_file_signature(data, file_sign_lengths, magic_numbers):
         
         if file_sign in magic_numbers: 
             print(magic_numbers[file_sign])
-            return
+            return magic_numbers[file_sign]
 
     print("Unable to identify file")
+    return None
 
 # Main function
 def main():
@@ -36,12 +38,15 @@ def main():
         return
     
     filename = sys.argv[1]
+    file_extension_original = Path(filename).suffix[1:]
     
     try:
         with open(filename, 'rb') as f:
             data = f.read(20)
             # print(data.hex())
             
+        print("Original extension:", file_extension_original)
+    
     except FileNotFoundError:
         print("File not found")
         return
@@ -51,14 +56,14 @@ def main():
         return
 
     file_sign_lengths = gen_sign_length(magic_numbers)
-    check_file_signature(data, file_sign_lengths, magic_numbers)
+    file_extension_actual = check_file_signature(data, file_sign_lengths, magic_numbers)
+    
+    if file_extension_actual is not None and file_extension_actual != file_extension_original:
+        print("Mistmatching file extensions. Potential file upload vulnerability")
+    
 
 main()
 
 # TODO:
-# 1. Remove debug print(data.hex()) line
-# 2. Add extension spoofing detection:
-#    - Extract file extension from filename (os.path.splitext or pathlib.Path.suffix)
-#    - Return detected type from check_file_signature instead of printing inside it
-#    - Compare extension vs detected type and warn if mismatch
-# 3. Add more magic numbers (e.g. MP3, GIF, BMP, DOCX)
+# 1. Check for mistmatches even if filetype is same (eg: jpg and jpeg)
+# 2. Add more magic numbers (e.g. MP3, GIF, BMP, DOCX)
