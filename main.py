@@ -1,69 +1,108 @@
 import sys
 from pathlib import Path
 
-magic_numbers = {
+# File signatures (magic numbers) mapped to their corresponding file types
+FILE_SIGNATURES = {
     b'\x89\x50\x4e\x47\x0d\x0a\x1a\x0a': 'png',
     b'\x25\x50\x44\x46\x2d': 'pdf',
     b'\x50\x4b\x03\x04': 'zip',
     b'\xff\xd8\xff\xe0': 'jpeg',
-    b'\x7f\x45\x4c\x46': 'elf'
+    b'\x7f\x45\x4c\x46': 'elf',
 }
 
-# Returns the possible signature lengths
-def gen_sign_length(magic_numbers):
-    file_sign_lengths = set()
+# Maps common alternative extensions to their canonical form
+EXTENSION_ALIASES = {
+    # Images
+    'jpg': 'jpeg',
+    'jpe': 'jpeg',
+    'jif': 'jpeg',
+    'jfif': 'jpeg',
+    'tif': 'tiff',
+    'heic': 'heif',
 
-    for signatures in magic_numbers:
-        file_sign_lengths.add(len(signatures))
-    
-    return file_sign_lengths
+    # Audio/Video
+    'mpg': 'mpeg',
+    'mpe': 'mpeg',
+    'm1v': 'mpeg',
+    'm2v': 'mpeg',
+    'm4a': 'mp4',
+    'm4v': 'mp4',
+    'mid': 'midi',
+    'ra': 'ram',
 
-# Returns the file type    
-def check_file_signature(data, file_sign_lengths, magic_numbers):
-    for i in sorted(file_sign_lengths, reverse=True):
-        file_sign = data[0:i]
-        # print(file_sign)
-        
-        if file_sign in magic_numbers: 
-            print(magic_numbers[file_sign])
-            return magic_numbers[file_sign]
+    # Documents & Web
+    'htm': 'html',
+    'markdown': 'md',
+    'text': 'txt',
 
-    print("Unable to identify file")
+    # Archives
+    'tgz': 'tar.gz',
+    'tbz2': 'tar.bz2',
+    '7z': '7zip',
+    'lzma': 'xz',
+}
+
+
+def get_signature_lengths(signatures: dict) -> set:
+    """Collect all unique signature byte lengths for efficient lookup."""
+    return {len(sig) for sig in signatures}
+
+
+def identify_file_type(header_bytes: bytes, signature_lengths: set, signatures: dict) -> str | None:
+    """Match the file header against known signatures, trying longest matches first."""
+    for length in sorted(signature_lengths, reverse=True):
+        candidate = header_bytes[:length]
+        if candidate in signatures:
+            return signatures[candidate]
+
+    print("Unable to identify file type from signature.")
     return None
 
-# Main function
+
+def normalize_extension(extension: str) -> str:
+    """Resolve an extension to its canonical form using the alias table."""
+    return EXTENSION_ALIASES.get(extension, extension)
+
+
 def main():
-    if(len(sys.argv) < 2):
-        print("Please enter the file address")
+    # Ensure a file path was provided
+    if len(sys.argv) < 2:
+        print("Usage: python main.py <file_path>")
         return
-    
-    filename = sys.argv[1]
-    file_extension_original = Path(filename).suffix[1:]
-    
+
+    file_path = sys.argv[1]
+
+    # Extract and normalize the file extension from the filename
+    declared_extension = Path(file_path).suffix[1:].lower()
+    normalized_extension = normalize_extension(declared_extension)
+
+    # Read the first 20 bytes (enough to cover the longest known signature)
     try:
-        with open(filename, 'rb') as f:
-            data = f.read(20)
-            # print(data.hex())
-            
-        print("Original extension:", file_extension_original)
-    
+        with open(file_path, 'rb') as f:
+            header_bytes = f.read(20)
     except FileNotFoundError:
-        print("File not found")
+        print("Error: File not found.")
         return
-    
     except PermissionError:
-        print("You dont have permission to access this file")
+        print("Error: Permission denied.")
         return
 
-    file_sign_lengths = gen_sign_length(magic_numbers)
-    file_extension_actual = check_file_signature(data, file_sign_lengths, magic_numbers)
-    
-    if file_extension_actual is not None and file_extension_actual != file_extension_original:
-        print("Mistmatching file extensions. Potential file upload vulnerability")
-    
+    # Identify the actual file type by matching against known signatures
+    signature_lengths = get_signature_lengths(FILE_SIGNATURES)
+    detected_type = identify_file_type(header_bytes, signature_lengths, FILE_SIGNATURES)
 
-main()
+    # Compare the declared extension with the detected file type
+    if detected_type is not None:
+        if detected_type == normalized_extension:
+            print(f"{declared_extension} == {detected_type}")
+            print("Extensions match.")
+        else:
+            print(f"{declared_extension} != {detected_type}")
+            print("Mismatching file extensions. Potential file upload vulnerability.")
+
+
+if __name__ == '__main__':
+    main()
 
 # TODO:
-# 1. Check for mistmatches even if filetype is same (eg: jpg and jpeg)
-# 2. Add more magic numbers (e.g. MP3, GIF, BMP, DOCX)
+# 1. Add more magic numbers (e.g. MP3, GIF, BMP, DOCX)
