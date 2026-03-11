@@ -1,0 +1,26 @@
+{
+    "jpg": "jpeg",
+    "jpe": "jpeg",
+    "jif": "jpeg",
+    "jfif": "jpeg",
+    "tif": "tiff",
+    "heic": "heif",
+
+    "mpg": "mpeg",
+    "mpe": "mpeg",
+    "m1v": "mpeg",
+    "m2v": "mpeg",
+    "m4a": "mp4",
+    "m4v": "mp4",
+    "mid": "midi",
+    "ra": "ram",
+
+    "htm": "html",
+    "markdown": "md",
+    "text": "txt",
+    
+    "tgz": "tar.gz",
+    "tbz2": "tar.bz2",
+    "7z": "7zip",
+    "lzma": "xz"
+}

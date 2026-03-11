@@ -2,38 +2,6 @@ import sys
 import json
 from pathlib import Path
 
-# Maps common alternative extensions to their canonical form
-EXTENSION_ALIASES = {
-    # Images
-    'jpg': 'jpeg',
-    'jpe': 'jpeg',
-    'jif': 'jpeg',
-    'jfif': 'jpeg',
-    'tif': 'tiff',
-    'heic': 'heif',
-
-    # Audio/Video
-    'mpg': 'mpeg',
-    'mpe': 'mpeg',
-    'm1v': 'mpeg',
-    'm2v': 'mpeg',
-    'm4a': 'mp4',
-    'm4v': 'mp4',
-    'mid': 'midi',
-    'ra': 'ram',
-
-    # Documents & Web
-    'htm': 'html',
-    'markdown': 'md',
-    'text': 'txt',
-
-    # Archives
-    'tgz': 'tar.gz',
-    'tbz2': 'tar.bz2',
-    '7z': '7zip',
-    'lzma': 'xz',
-}
-
 
 def get_signature_lengths(signatures: dict) -> set:
     """Collect all unique signature byte lengths for efficient lookup."""
@@ -57,9 +25,9 @@ def identify_file_type(header_bytes: bytes, signature_lengths: set, signatures: 
     return None
 
 
-def normalize_extension(extension: str) -> str:
+def normalize_extension(extension: str, aliases_dict: dict) -> str:
     """Resolve an extension to its canonical form using the alias table."""
-    return EXTENSION_ALIASES.get(extension, extension)
+    return aliases_dict.get(extension, extension)
 
 
 def main():
@@ -72,7 +40,18 @@ def main():
 
     # Extract and normalize the file extension from the filename
     declared_extension = Path(file_path).suffix[1:].lower()
-    normalized_extension = normalize_extension(declared_extension)
+    
+    try:
+        with open('extension_aliases.json', 'r') as aliases_file:
+            aliases = json.load(aliases_file)
+    except FileNotFoundError:
+        print("Error: Aliases file not found")
+        return
+    except json.JSONDecodeError:
+        print("Error: Aliases file corrupted")
+        return
+        
+    normalized_extension = normalize_extension(declared_extension, aliases)
 
     # Read the first 20 bytes (enough to cover the longest known signature)
     try:
@@ -86,8 +65,15 @@ def main():
         return
     
     # Collect file signatures from json and parse 
-    with open('file_signatures.json', 'r') as signature_file:
-        file_signatures = json.load(signature_file)
+    try:
+        with open('file_signatures.json', 'r') as signature_file:
+            file_signatures = json.load(signature_file)
+    except FileNotFoundError:
+        print("Signatures file not found")
+        return
+    except json.JSONDecodeError:
+        print("Error: Signatures file corrupted")
+        return
 
     # Identify the actual file type by matching against known signatures
     signature_lengths = get_signature_lengths(file_signatures)
