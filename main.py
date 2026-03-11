@@ -1,14 +1,6 @@
 import sys
+import json
 from pathlib import Path
-
-# File signatures (magic numbers) mapped to their corresponding file types
-FILE_SIGNATURES = {
-    b'\x89\x50\x4e\x47\x0d\x0a\x1a\x0a': 'png',
-    b'\x25\x50\x44\x46\x2d': 'pdf',
-    b'\x50\x4b\x03\x04': 'zip',
-    b'\xff\xd8\xff\xe0': 'jpeg',
-    b'\x7f\x45\x4c\x46': 'elf',
-}
 
 # Maps common alternative extensions to their canonical form
 EXTENSION_ALIASES = {
@@ -45,13 +37,19 @@ EXTENSION_ALIASES = {
 
 def get_signature_lengths(signatures: dict) -> set:
     """Collect all unique signature byte lengths for efficient lookup."""
-    return {len(sig) for sig in signatures}
+    file_sign_lengths = set()
+
+    for signature in signatures:
+        file_sign_lengths.add(len(bytes.fromhex(signature)))
+    
+    return file_sign_lengths
 
 
 def identify_file_type(header_bytes: bytes, signature_lengths: set, signatures: dict) -> str | None:
     """Match the file header against known signatures, trying longest matches first."""
     for length in sorted(signature_lengths, reverse=True):
-        candidate = header_bytes[:length]
+        # Convert candidate from bytes to string
+        candidate = header_bytes[:length].hex()
         if candidate in signatures:
             return signatures[candidate]
 
@@ -86,10 +84,14 @@ def main():
     except PermissionError:
         print("Error: Permission denied.")
         return
+    
+    # Collect file signatures from json and parse 
+    with open('file_signatures.json', 'r') as signature_file:
+        file_signatures = json.load(signature_file)
 
     # Identify the actual file type by matching against known signatures
-    signature_lengths = get_signature_lengths(FILE_SIGNATURES)
-    detected_type = identify_file_type(header_bytes, signature_lengths, FILE_SIGNATURES)
+    signature_lengths = get_signature_lengths(file_signatures)
+    detected_type = identify_file_type(header_bytes, signature_lengths, file_signatures)
 
     # Compare the declared extension with the detected file type
     if detected_type is not None:
