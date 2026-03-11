@@ -18,6 +18,7 @@ def identify_file_type(header_bytes: bytes, signature_lengths: set, signatures: 
     for length in sorted(signature_lengths, reverse=True):
         # Convert candidate from bytes to string
         candidate = header_bytes[:length].hex()
+        
         if candidate in signatures:
             return signatures[candidate]
 
@@ -28,6 +29,21 @@ def identify_file_type(header_bytes: bytes, signature_lengths: set, signatures: 
 def normalize_extension(extension: str, aliases_dict: dict) -> str:
     """Resolve an extension to its canonical form using the alias table."""
     return aliases_dict.get(extension, extension)
+
+
+def get_file_signature(file_path: str, max_length: int) -> bytes | None:
+    """Read the first n bytes (enough to cover the longest known signature)"""
+    try:
+        with open(file_path, 'rb') as f:
+            header_bytes = f.read(max_length)
+    except FileNotFoundError:
+        print("Error: File not found.")
+        return 
+    except PermissionError:
+        print("Error: Permission denied.")
+        return 
+    
+    return header_bytes
 
 
 def main():
@@ -41,6 +57,7 @@ def main():
     # Extract and normalize the file extension from the filename
     declared_extension = Path(file_path).suffix[1:].lower()
     
+    # Open the aliases file
     try:
         with open('extension_aliases.json', 'r') as aliases_file:
             aliases = json.load(aliases_file)
@@ -50,20 +67,10 @@ def main():
     except json.JSONDecodeError:
         print("Error: Aliases file corrupted")
         return
-        
+    
+    # Check for aliases
     normalized_extension = normalize_extension(declared_extension, aliases)
 
-    # Read the first 20 bytes (enough to cover the longest known signature)
-    try:
-        with open(file_path, 'rb') as f:
-            header_bytes = f.read(20)
-    except FileNotFoundError:
-        print("Error: File not found.")
-        return
-    except PermissionError:
-        print("Error: Permission denied.")
-        return
-    
     # Collect file signatures from json and parse 
     try:
         with open('file_signatures.json', 'r') as signature_file:
@@ -74,9 +81,16 @@ def main():
     except json.JSONDecodeError:
         print("Error: Signatures file corrupted")
         return
+    
+    # Get length of file_signatures and the max value
+    signature_lengths = get_signature_lengths(file_signatures)
+    max_length = max(signature_lengths)
+    
+    # Get the header bytes of the original file
+    header_bytes = get_file_signature(file_path, max_length)
+    if header_bytes is None: return
 
     # Identify the actual file type by matching against known signatures
-    signature_lengths = get_signature_lengths(file_signatures)
     detected_type = identify_file_type(header_bytes, signature_lengths, file_signatures)
 
     # Compare the declared extension with the detected file type
@@ -93,4 +107,4 @@ if __name__ == '__main__':
     main()
 
 # TODO:
-# 1. Add more magic numbers (e.g. MP3, GIF, BMP, DOCX)
+# 1. Create aliases (implement support for lists)
