@@ -19,8 +19,6 @@
     "markdown": "md",
     "text": "txt",
     
-    "tgz": "tar.gz",
-    "tbz2": "tar.bz2",
-    "7z": "7zip",
-    "lzma": "xz"
+    "tgz": "gz",
+    "tbz2": "bz2"
 }
