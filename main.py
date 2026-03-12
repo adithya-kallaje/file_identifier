@@ -110,4 +110,7 @@ if __name__ == '__main__':
     main()
 
 # TODO:
-# 1. Test
+# 1. Handle files with no extension — currently Path.suffix returns '' which breaks the comparison
+# 2. Add text-based format detection (source code, JSON, CSV, YAML, HTML) — magic bytes don't work for these
+# 3. Improve output — report *why* a mismatch occurred (e.g. ZIP container, weak signature)
+# 4. Add batch processing — accept a directory path and scan all files within it

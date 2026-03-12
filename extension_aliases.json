@@ -1,11 +1,16 @@
 [
-    { "aliases": ["jpg", "jpe", "jif", "jfif"], "canonical": "jpeg" },
+    { "aliases": ["jpg", "jpe", "jif", "jfif", "jps"], "canonical": "jpeg" },
     { "aliases": ["tif"], "canonical": "tiff" },
     { "aliases": ["heic"], "canonical": "heif" },
     { "aliases": ["dib"], "canonical": "bmp" },
     { "aliases": ["wave"], "canonical": "wav" },
     { "aliases": ["j2k", "j2c", "jpc", "jpx", "jpf"], "canonical": "jp2" },
     { "aliases": ["webm", "mka", "mks"], "canonical": "mkv" },
+    { "aliases": ["cur", "dfont"], "canonical": "ico" },
+    { "aliases": ["picon"], "canonical": "xpm" },
+    { "aliases": ["pnm"], "canonical": "ppm" },
+
+    { "aliases": ["wma", "wmv"], "canonical": "asf" },
 
     { "aliases": ["mpg", "mpe", "m1v", "m2v"], "canonical": "mpeg" },
     { "aliases": ["m4a", "m4v"], "canonical": "mp4" },
@@ -13,20 +18,23 @@
     { "aliases": ["ra"], "canonical": "ram" },
     { "aliases": ["mpga"], "canonical": "mp3" },
     { "aliases": ["snd"], "canonical": "au" },
-    { "aliases": ["oga", "ogv", "spx"], "canonical": "ogg" },
+    { "aliases": ["oga", "ogv", "spx", "opus"], "canonical": "ogg" },
+    { "aliases": ["mpeg", "vob"], "canonical": "m2p" },
 
     { "aliases": ["htm"], "canonical": "html" },
     { "aliases": ["markdown"], "canonical": "md" },
     { "aliases": ["text"], "canonical": "txt" },
     { "aliases": ["m3u8"], "canonical": "m3u" },
+    { "aliases": ["cff"], "canonical": "ps" },
 
     { "aliases": ["tgz"], "canonical": "gz" },
     { "aliases": ["tbz2"], "canonical": "bz2" },
     { "aliases": ["txz"], "canonical": "xz" },
     { "aliases": ["zstd"], "canonical": "zst" },
     { "aliases": ["cbr"], "canonical": "rar" },
-    { "aliases": ["cbz"], "canonical": "zip" },
+    { "aliases": ["cbz", "docx", "epub", "odp", "ods", "odt", "ott", "xlsx"], "canonical": "zip" },
     { "aliases": ["cb7"], "canonical": "7z" },
+    { "aliases": ["xls", "ppt"], "canonical": "doc" },
 
     { "aliases": ["scr"], "canonical": "exe" },
     { "aliases": ["cap"], "canonical": "pcap" },
