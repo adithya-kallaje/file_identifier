@@ -1,24 +1,38 @@
-{
-    "jpg": "jpeg",
-    "jpe": "jpeg",
-    "jif": "jpeg",
-    "jfif": "jpeg",
-    "tif": "tiff",
-    "heic": "heif",
+[
+    { "aliases": ["jpg", "jpe", "jif", "jfif"], "canonical": "jpeg" },
+    { "aliases": ["tif"], "canonical": "tiff" },
+    { "aliases": ["heic"], "canonical": "heif" },
+    { "aliases": ["dib"], "canonical": "bmp" },
+    { "aliases": ["wave"], "canonical": "wav" },
+    { "aliases": ["j2k", "j2c", "jpc", "jpx", "jpf"], "canonical": "jp2" },
+    { "aliases": ["webm", "mka", "mks"], "canonical": "mkv" },
 
-    "mpg": "mpeg",
-    "mpe": "mpeg",
-    "m1v": "mpeg",
-    "m2v": "mpeg",
-    "m4a": "mp4",
-    "m4v": "mp4",
-    "mid": "midi",
-    "ra": "ram",
+    { "aliases": ["mpg", "mpe", "m1v", "m2v"], "canonical": "mpeg" },
+    { "aliases": ["m4a", "m4v"], "canonical": "mp4" },
+    { "aliases": ["mid"], "canonical": "midi" },
+    { "aliases": ["ra"], "canonical": "ram" },
+    { "aliases": ["mpga"], "canonical": "mp3" },
+    { "aliases": ["snd"], "canonical": "au" },
+    { "aliases": ["oga", "ogv", "spx"], "canonical": "ogg" },
 
-    "htm": "html",
-    "markdown": "md",
-    "text": "txt",
-    
-    "tgz": "gz",
-    "tbz2": "bz2"
-}
+    { "aliases": ["htm"], "canonical": "html" },
+    { "aliases": ["markdown"], "canonical": "md" },
+    { "aliases": ["text"], "canonical": "txt" },
+    { "aliases": ["m3u8"], "canonical": "m3u" },
+
+    { "aliases": ["tgz"], "canonical": "gz" },
+    { "aliases": ["tbz2"], "canonical": "bz2" },
+    { "aliases": ["txz"], "canonical": "xz" },
+    { "aliases": ["zstd"], "canonical": "zst" },
+    { "aliases": ["cbr"], "canonical": "rar" },
+    { "aliases": ["cbz"], "canonical": "zip" },
+    { "aliases": ["cb7"], "canonical": "7z" },
+
+    { "aliases": ["scr"], "canonical": "exe" },
+    { "aliases": ["cap"], "canonical": "pcap" },
+    { "aliases": ["sqlite", "sqlite3", "db", "db3"], "canonical": "sqlitedb" },
+
+    { "aliases": ["cer", "der", "cert"], "canonical": "crt" },
+    { "aliases": ["req"], "canonical": "csr" },
+    { "aliases": ["pgp", "gpg", "sig"], "canonical": "asc" }
+]

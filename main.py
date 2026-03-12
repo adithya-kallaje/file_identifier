@@ -26,9 +26,12 @@ def identify_file_type(header_bytes: bytes, signature_lengths: set, signatures: 
     return None
 
 
-def normalize_extension(extension: str, aliases_dict: dict) -> str:
+def normalize_extension(extension: str, aliases_list: list) -> str:
     """Resolve an extension to its canonical form using the alias table."""
-    return aliases_dict.get(extension, extension)
+    for extensions in aliases_list:
+        if extension in extensions['aliases']:
+            return extensions['canonical']
+    return extension
 
 
 def get_file_signature(file_path: str, max_length: int) -> bytes | None:
@@ -107,4 +110,4 @@ if __name__ == '__main__':
     main()
 
 # TODO:
-# 1. Create aliases (implement support for lists)
+# 1. Test
