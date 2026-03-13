@@ -8,6 +8,8 @@ def get_signature_lengths(signatures: dict) -> set:
     file_sign_lengths = set()
 
     for signature in signatures:
+        if signature.startswith('__'):
+            continue
         file_sign_lengths.add(len(bytes.fromhex(signature)))
     
     return file_sign_lengths
@@ -29,7 +31,7 @@ def identify_file_type(header_bytes: bytes, signature_lengths: set, signatures: 
 def normalize_extension(extension: str, aliases_list: list) -> str:
     """Resolve an extension to its canonical form using the alias table."""
     for extensions in aliases_list:
-        if extension in extensions['aliases']:
+        if 'aliases' in extensions and extension in extensions['aliases']:
             return extensions['canonical']
     return extension
 
@@ -85,7 +87,7 @@ def main():
         print("Error: Signatures file corrupted")
         return
     
-    # Get length of file_signatures and the max value
+    # Get length of the longest file_signature 
     signature_lengths = get_signature_lengths(file_signatures)
     max_length = max(signature_lengths)
     
