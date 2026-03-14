@@ -60,7 +60,7 @@ def main():
     file_path = sys.argv[1]
 
     # Extract and normalize the file extension from the filename
-    declared_extension = Path(file_path).suffix[1:].lower()
+    declared_extension = Path(file_path).suffix[1:].lower() 
     
     # Open the aliases file
     try:
@@ -100,19 +100,20 @@ def main():
 
     # Compare the declared extension with the detected file type
     if detected_type is not None:
-        if detected_type == normalized_extension:
+        if declared_extension == '':
+            print(f"Detected {detected_type} from header values \nFile has no extension, potential file upload vulnerability")
+        elif detected_type == normalized_extension:
             print(f"{declared_extension} == {detected_type}")
             print("Extensions match.")
         else:
             print(f"{declared_extension} != {detected_type}")
             print("Mismatching file extensions. Potential file upload vulnerability.")
-
+        
 
 if __name__ == '__main__':
     main()
 
 # TODO:
-# 1. Handle files with no extension — currently Path.suffix returns '' which breaks the comparison
 # 2. Add text-based format detection (source code, JSON, CSV, YAML, HTML) — magic bytes don't work for these
 # 3. Improve output — report *why* a mismatch occurred (e.g. ZIP container, weak signature)
 # 4. Add batch processing — accept a directory path and scan all files within it
