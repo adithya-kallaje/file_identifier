@@ -24,7 +24,6 @@ def identify_file_type(header_bytes: bytes, signature_lengths: set, signatures: 
         if candidate in signatures:
             return signatures[candidate]
 
-    print("Unable to identify file type from signature.")
     return None
 
 
@@ -36,22 +35,12 @@ def normalize_extension(extension: str, aliases_list: list) -> str:
     return extension
 
 
-def get_file_signature(file_path: str, max_length: int) -> bytes | None:
-    """Read the first n bytes (enough to cover the longest known signature)"""
-    try:
-        with open(file_path, 'rb') as f:
-            header_bytes = f.read(max_length)
-    except FileNotFoundError:
-        print("Error: File not found.")
-        return 
-    except PermissionError:
-        print("Error: Permission denied.")
-        return 
-    
-    return header_bytes
-
+def text_based_format_detection(data:bytes) -> str | None:
+    return None
+        
 
 def main():
+    '''Input Validation and file normalization'''
     # Ensure a file path was provided
     if len(sys.argv) < 2:
         print("Usage: python main.py <file_path>")
@@ -60,8 +49,9 @@ def main():
     file_path = sys.argv[1]
 
     # Extract and normalize the file extension from the filename
-    declared_extension = Path(file_path).suffix[1:].lower() 
+    declared_extension = Path(file_path).suffix[1:].lower()  
     
+    '''Open Relevant files for comparisons'''
     # Open the aliases file
     try:
         with open('extension_aliases.json', 'r') as aliases_file:
@@ -72,9 +62,6 @@ def main():
     except json.JSONDecodeError:
         print("Error: Aliases file corrupted")
         return
-    
-    # Check for aliases
-    normalized_extension = normalize_extension(declared_extension, aliases)
 
     # Collect file signatures from json and parse 
     try:
@@ -87,16 +74,34 @@ def main():
         print("Error: Signatures file corrupted")
         return
     
+    '''Open input files'''
     # Get length of the longest file_signature 
     signature_lengths = get_signature_lengths(file_signatures)
     max_length = max(signature_lengths)
+ 
+    # Open the input file and read the header bytes and first 4096 bytes
+    try:
+        with open(file_path, 'rb') as f:
+            header_bytes = f.read(max_length)
+            f.seek(0)
+            text_content = f.read(4096)
+    except FileNotFoundError:
+        print("Error: File not found.")
+        return 
+    except PermissionError:
+        print("Error: Permission denied.")
+        return 
     
-    # Get the header bytes of the original file
-    header_bytes = get_file_signature(file_path, max_length)
-    if header_bytes is None: return
-
+    '''Identify and confirm the file type'''
+    # Check for aliases
+    normalized_extension = normalize_extension(declared_extension, aliases)
+    
     # Identify the actual file type by matching against known signatures
     detected_type = identify_file_type(header_bytes, signature_lengths, file_signatures)
+    
+    # Identify file type by checking text content if magic number fails
+    if detected_type == None: 
+        detected_type = text_based_format_detection(text_content)
 
     # Compare the declared extension with the detected file type
     if detected_type is not None:
@@ -108,12 +113,9 @@ def main():
         else:
             print(f"{declared_extension} != {detected_type}")
             print("Mismatching file extensions. Potential file upload vulnerability.")
+    else:
+        print("Unable to detect file type")
         
 
 if __name__ == '__main__':
     main()
-
-# TODO:
-# 2. Add text-based format detection (source code, JSON, CSV, YAML, HTML) — magic bytes don't work for these
-# 3. Improve output — report *why* a mismatch occurred (e.g. ZIP container, weak signature)
-# 4. Add batch processing — accept a directory path and scan all files within it
