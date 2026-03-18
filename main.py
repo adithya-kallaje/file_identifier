@@ -1,6 +1,7 @@
 import sys
 import json
 from pathlib import Path
+import text_parser
 
 
 def get_signature_lengths(signatures: dict) -> set:
@@ -33,10 +34,6 @@ def normalize_extension(extension: str, aliases_list: list) -> str:
         if 'aliases' in extensions and extension in extensions['aliases']:
             return extensions['canonical']
     return extension
-
-
-def text_based_format_detection(data:bytes) -> str | None:
-    return None
         
 
 def main():
@@ -84,7 +81,7 @@ def main():
         with open(file_path, 'rb') as f:
             header_bytes = f.read(max_length)
             f.seek(0)
-            text_content = f.read(4096)
+            text_content = f.read()
     except FileNotFoundError:
         print("Error: File not found.")
         return 
@@ -97,21 +94,26 @@ def main():
     normalized_extension = normalize_extension(declared_extension, aliases)
     
     # Identify the actual file type by matching against known signatures
-    detected_type = identify_file_type(header_bytes, signature_lengths, file_signatures)
+    detected_extension = identify_file_type(header_bytes, signature_lengths, file_signatures)
+    # print(f"Detected extension = {detected_extension}\nNormalized extension = {normalized_extension}")
     
     # Identify file type by checking text content if magic number fails
-    if detected_type == None: 
-        detected_type = text_based_format_detection(text_content)
+    if detected_extension == None or detected_extension != normalized_extension:
+        # print("Text parser called")
+        detected_extension = text_parser.text_based_format_detection(text_content, detected_extension)
+        
 
     # Compare the declared extension with the detected file type
-    if detected_type is not None:
+    if detected_extension is not None:
         if declared_extension == '':
-            print(f"Detected {detected_type} from header values \nFile has no extension, potential file upload vulnerability")
-        elif detected_type == normalized_extension:
-            print(f"{declared_extension} == {detected_type}")
+            print(f"Detected {detected_extension} from header values \nFile has no extension, potential file upload vulnerability")
+        elif detected_extension == normalized_extension:
+            print(f"Given file type: {declared_extension}")
+            print(f"Actual file type: {detected_extension}")
             print("Extensions match.")
         else:
-            print(f"{declared_extension} != {detected_type}")
+            print(f"Given file type: {declared_extension}")
+            print(f"Actual file type: {detected_extension}")
             print("Mismatching file extensions. Potential file upload vulnerability.")
     else:
         print("Unable to detect file type")

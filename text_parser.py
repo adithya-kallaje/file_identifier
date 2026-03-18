@@ -21,8 +21,8 @@ def check_json(data:str) -> str | None:
     decoder = json.JSONDecoder()
     try:
         decoded_file = decoder.decode(data)
-        if isinstance(decoded_file, dict,list):
-            return 'JSON'
+        if isinstance(decoded_file, (dict,list)):
+            return 'json'
         else: return None  
     except json.JSONDecodeError:
         return None
@@ -46,10 +46,11 @@ def check_csv(data:str) -> str | None:
             return None
             
         for row in rows[1:]:
+            if len(row) == 0: continue
             if len(row) != col_count:
                 return None
         
-        return 'CSV'
+        return 'csv'
     except csv.Error:
         return None
     
@@ -89,19 +90,20 @@ def check_xml(data:str) -> str | None:
         # Identify file type by namespace URI or tag name
         if ns_uri:
             if 'kml' in ns_uri.lower():
-                return 'KML'
+                return 'kml'
             elif 'svg' in ns_uri.lower():
-                return 'SVG'
+                return 'svg'
             else:
-                return 'XML'
+                print("Returned nothing")
+                return 'xml'
         else:
             tag_name = root.tag.lower()
             if 'kml' in tag_name:
-                return 'KML'
+                return 'kml'
             elif 'svg' in tag_name:
-                return 'SVG'
+                return 'svg'
             else:
-                return 'XML'
+                return 'xml'
     except ET.ParseError:
         return None
 
@@ -158,17 +160,17 @@ def check_markdown(data:str) -> str | None:
         # print(f"Indicators for Markdown = {indicators}")
         
         if len(indicators) >= 2:
-            return 'Markdown'
+            return 'md'
         else:
             return None
     except Exception as e:
         return None
         
 
-def text_based_format_detection(data:bytes) -> str | None:
+def text_based_format_detection(data:bytes, current_extension: str) -> str | None:
     
     decoded_data = check_readability(data)
-    if decoded_data == None: return None
+    if decoded_data == None: return current_extension
     
     is_json = check_json(decoded_data)
     if is_json is not None: return is_json
@@ -188,9 +190,9 @@ def text_based_format_detection(data:bytes) -> str | None:
     is_markdown = check_markdown(decoded_data)
     if is_markdown is not None: return is_markdown
     
-    return None
+    return current_extension
                     
-
+""" 
 filepath = sys.argv[1]
 # filepath = 'test_files/sample.md'
 with open(filepath, 'rb') as f:
@@ -198,4 +200,5 @@ with open(filepath, 'rb') as f:
     file_type = text_based_format_detection(data)   
     
     if file_type is None: print("Dumb fucking file detected")
-    else: print(f"Detected file type: {file_type}")
+    else: print(f"Detected file type: {file_type}") 
+"""
