@@ -120,6 +120,7 @@ def check_yaml(data:str) -> str | None:
         return None
     
     
+"""     
 def check_markdown(data:str) -> str | None:
     '''Check for Markdown'''
     try:
@@ -164,7 +165,8 @@ def check_markdown(data:str) -> str | None:
         else:
             return None
     except Exception as e:
-        return None
+        return None 
+"""
         
 
 def text_based_format_detection(data:bytes, current_extension: str) -> str | None:
@@ -187,10 +189,7 @@ def text_based_format_detection(data:bytes, current_extension: str) -> str | Non
     is_yaml = check_yaml(decoded_data)
     if is_yaml is not None: return is_yaml
     
-    is_markdown = check_markdown(decoded_data)
-    if is_markdown is not None: return is_markdown
-    
-    return current_extension
+    return 'txt'
                     
 """ 
 filepath = sys.argv[1]

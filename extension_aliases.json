@@ -1,8 +1,7 @@
 [
     { "__comment": "image" },
     { "aliases": ["jpg", "jpe", "jif", "jfif", "jps"], "canonical": "jpeg" },
-    { "aliases": ["tif"], "canonical": "tiff" },
-    { "aliases": ["heic"], "canonical": "heif" },
+    { "aliases": ["tif", "dng", "nef"], "canonical": "tiff" },
     { "aliases": ["dib"], "canonical": "bmp" },
     { "aliases": ["j2k", "j2c", "jpc", "jpx", "jpf"], "canonical": "jp2" },
     { "aliases": ["pnm"], "canonical": "ppm" },
@@ -11,7 +10,6 @@
 
     { "__comment": "video" },
     { "aliases": ["mpg", "mpe", "m1v", "m2v"], "canonical": "mpeg" },
-    { "aliases": ["m4a", "m4v"], "canonical": "mp4" },
     { "aliases": ["webm", "mka", "mks"], "canonical": "mkv" },
     { "aliases": ["wma", "wmv"], "canonical": "asf" },
     { "aliases": ["mpeg", "vob"], "canonical": "m2p" },
@@ -27,7 +25,7 @@
     { "__comment": "document" },
     { "aliases": ["htm"], "canonical": "html" },
     { "aliases": ["fb2"], "canonical": "xml" },
-    { "aliases": ["markdown"], "canonical": "md" },
+    { "aliases": ["md", "py", "rb", "js", "ts", "java", "go", "rs", "cs", "sh", "bat", "css", "pl", "pl", "sql", "swift", "vb", "xyz", "h", "htaccess"], "canonical": "txt" },
     { "aliases": ["text"], "canonical": "txt" },
     { "aliases": ["m3u8"], "canonical": "m3u" },
     { "aliases": ["cff"], "canonical": "ps" },

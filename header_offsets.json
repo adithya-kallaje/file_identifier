@@ -1,0 +1,16 @@
+{
+    "__comment_video": "video",
+    "3gp": 4,
+    "m4v": 4,
+    "mov": 4,
+    "mp4": 4,
+    "avi": 8,
+
+    "__comment_audio": "audio",
+    "m4a": 4,
+
+    "__comment_image": "image",
+    "heic": 4,
+    "heif": 4,
+    "webp": 8
+}
