@@ -1,7 +1,7 @@
 [
     { "__comment": "image" },
-    { "aliases": ["jpg", "jpe", "jif", "jfif", "jps"], "canonical": "jpeg" },
-    { "aliases": ["tif", "dng", "nef"], "canonical": "tiff" },
+    { "aliases": ["jpg", "jpe", "jif", "jfif", "jps", "mjpeg"], "canonical": "jpeg" },
+    { "aliases": ["tif", "dng", "nef", "pef"], "canonical": "tiff" },
     { "aliases": ["dib"], "canonical": "bmp" },
     { "aliases": ["j2k", "j2c", "jpc", "jpx", "jpf"], "canonical": "jp2" },
     { "aliases": ["pnm"], "canonical": "ppm" },
@@ -13,19 +13,21 @@
     { "aliases": ["webm", "mka", "mks"], "canonical": "mkv" },
     { "aliases": ["wma", "wmv"], "canonical": "asf" },
     { "aliases": ["mpeg", "vob"], "canonical": "m2p" },
+    { "aliases": ["m4r"], "canonical": "mp4" },
+
 
     { "__comment": "audio" },
-    { "aliases": ["wave"], "canonical": "wav" },
+    { "aliases": ["wave", "amb"], "canonical": "wav" },
     { "aliases": ["mpga"], "canonical": "mp3" },
     { "aliases": ["snd"], "canonical": "au" },
     { "aliases": ["mid"], "canonical": "midi" },
-    { "aliases": ["ra"], "canonical": "ram" },
+    { "aliases": ["ra"], "canonical": "rm" },
     { "aliases": ["oga", "ogv", "spx", "opus"], "canonical": "ogg" },
 
     { "__comment": "document" },
     { "aliases": ["htm"], "canonical": "html" },
     { "aliases": ["fb2"], "canonical": "xml" },
-    { "aliases": ["md", "py", "rb", "js", "ts", "java", "go", "rs", "cs", "sh", "bat", "css", "pl", "pl", "sql", "swift", "vb", "xyz", "h", "htaccess"], "canonical": "txt" },
+    { "aliases": ["md", "py", "rb", "js", "ts", "java", "go", "rs", "cs", "sh", "bat", "css", "pl", "pl", "sql", "swift", "vb", "xyz", "h", "htaccess", "c"], "canonical": "txt" },
     { "aliases": ["text"], "canonical": "txt" },
     { "aliases": ["m3u8"], "canonical": "m3u" },
     { "aliases": ["cff"], "canonical": "ps" },
@@ -53,5 +55,8 @@
     { "__comment": "security" },
     { "aliases": ["cer", "der", "cert"], "canonical": "crt" },
     { "aliases": ["req"], "canonical": "csr" },
-    { "aliases": ["pgp", "gpg", "sig"], "canonical": "asc" }
+    { "aliases": ["pgp", "gpg", "sig"], "canonical": "asc" },
+
+    { "__comment": "ebook" },
+    { "aliases": ["azw3"], "canonical": "mobi" }
 ]

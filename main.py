@@ -2,25 +2,7 @@ import sys
 import json
 from pathlib import Path
 import text_parser    
-
-
-def get_header_offset(extension:str) -> int | None:
-    # Open the header offset json
-    try:
-        with open('header_offsets.json', 'r') as f:
-            header_offsets = json.load(f)
-    except FileNotFoundError:
-        print("Error: Header file not found")
-        return None
-    except json.JSONDecodeError:
-        print("Error: Header file corrupted")
-        return None
-    
-    # Return the header offset for the extension
-    for extension_list in header_offsets:
-        if extension_list.startswith('__'): continue
-        elif extension in extension_list: return header_offsets[extension_list]
-    return 0
+from re import match
 
 
 def get_signature_list() -> bytes:
@@ -34,18 +16,6 @@ def get_signature_list() -> bytes:
     except json.JSONDecodeError:
         print("Error: Signatures file corrupted")
         return None
-
-
-def get_signature_lengths(signatures: dict) -> set:
-    # Collect all unique signature byte lengths
-    file_sign_lengths = set()
-
-    for signature in signatures:
-        if signature.startswith('__'):
-            continue
-        file_sign_lengths.add(len(bytes.fromhex(signature)))
-    
-    return file_sign_lengths
 
 
 def normalise_extension(extension: str) -> str:
@@ -67,17 +37,21 @@ def normalise_extension(extension: str) -> str:
     return extension
 
 
-def identify_file_type(header_bytes: bytes, signature_lengths: set, signatures: dict, normalised_ext: str, file_path: str) -> str | None:
-    """Match the file header against known signatures, trying longest matches first."""
+def identify_file_type(header_bytes: bytes, signatures: dict, normalised_ext: str, file_path: str) -> str | None:
     detected_ext = None
     
-    for length in sorted(signature_lengths, reverse=True):
-        # Convert candidate from bytes to string
-        candidate = header_bytes[:length].hex()
+    sorted_signatures = dict(sorted(signatures.items(), key=lambda x: len(x[0]), reverse=True))
+    
+    for signature in sorted_signatures:
+        if signature.startswith('__'): continue
         
-        if candidate in signatures:
-            detected_ext = signatures[candidate]
+        header_offset = signatures[signature][0] * 2
+        matching_signature = '.' * header_offset + signature
+        
+        if match(matching_signature, header_bytes.hex()): 
+            detected_ext = signatures[signature][1]
             break
+        
 
     if detected_ext == None or detected_ext != normalised_ext:        
         # Read the input file
@@ -86,6 +60,7 @@ def identify_file_type(header_bytes: bytes, signature_lengths: set, signatures: 
         
         # Check for text_parsing if original detection resulted in failure or mismatch
         return text_parser.text_based_format_detection(text_content, detected_ext)
+    
     return detected_ext
 
 
@@ -121,24 +96,19 @@ def main():
 
     # Get the extension from the file
     file_path = sys.argv[1]
+    # file_path = "test_files/frieren"
 
-    # Extract the file extension from the filename and get the header_offset
+    # Extract the file extension from the filename
     declared_extension = Path(file_path).suffix[1:].lower()  
-    header_offset = get_header_offset(declared_extension)
-    if header_offset is None: return
     
     # Collect file signatures from json and parse 
     file_signatures = get_signature_list()
     if file_signatures is None: return
-    
-    # Get length of the longest file_signature 
-    signature_lengths = get_signature_lengths(file_signatures)
-    max_length = max(signature_lengths)
  
     # Open the input file and read the header bytes
     try:
         with open(file_path, 'rb') as f:
-            header_bytes = f.read(max_length)[header_offset:]
+            header_bytes = f.read(2500)
     except FileNotFoundError:
         print("Error: File not found.")
         return 
@@ -151,7 +121,7 @@ def main():
     if normalised_extension is None: return None
     
     # Identify the actual file type using file signatures and text_parsing
-    detected_extension = identify_file_type(header_bytes, signature_lengths, file_signatures, normalised_extension, file_path)
+    detected_extension = identify_file_type(header_bytes, file_signatures, normalised_extension, file_path)
 
     # Compare the declared extension with the detected file type
     output(detected_extension, declared_extension, normalised_extension)
