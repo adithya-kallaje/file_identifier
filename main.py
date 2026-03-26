@@ -40,8 +40,12 @@ def normalise_extension(extension: str) -> str:
 def identify_file_type(header_bytes: bytes, signatures: dict, normalised_ext: str, file_path: str) -> str | None:
     detected_ext = None
     
-    sorted_signatures = dict(sorted(signatures.items(), key=lambda x: len(x[0]), reverse=True))
-    
+    sorted_signatures = dict(sorted(                                                                                                                                           
+      {k: v for k, v in signatures.items() if not k.startswith("__")}.items(),                                                                                               
+      key=lambda x: len(x[0]) + x[1][0] * 2,                                                                                                                                 
+      reverse=True                                                                                                                                                           
+    ))
+
     for signature in sorted_signatures:
         if signature.startswith('__'): continue
         
