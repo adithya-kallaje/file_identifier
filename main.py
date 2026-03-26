@@ -37,16 +37,38 @@ def normalise_extension(extension: str) -> str:
     return extension
 
 
-def identify_file_type(header_bytes: bytes, signatures: dict, normalised_ext: str, file_path: str) -> str | None:
-    detected_ext = None
+def identify_file_type(header_bytes: bytes, normalised_ext: str, file_path: str) -> str | None:
+    signatures_list = get_signature_list()
+    if signatures_list is None: return
     
-    sorted_signatures = dict(sorted(                                                                                                                                           
-      {k: v for k, v in signatures.items() if not k.startswith("__")}.items(),                                                                                               
-      key=lambda x: len(x[0]) + x[1][0] * 2,                                                                                                                                 
-      reverse=True                                                                                                                                                           
-    ))
-
-    for signature in sorted_signatures:
+    detected_ext = None
+    detected_ext_length = 0
+    
+    # Iterate through all file types
+    for files_types in signatures_list:
+        if files_types.startswith('__'): continue
+        
+        for signatures in signatures_list[files_types]:
+            header_offset = signatures["offset"] * 2
+            matching_signatures = '.' * header_offset + signatures["signature"]
+            
+            if match(matching_signatures, header_bytes.hex()) and len(matching_signatures) > detected_ext_length:
+                detected_ext = files_types
+                detected_ext_length = len(matching_signatures)
+        
+    if detected_ext == None or detected_ext != normalised_ext:        
+        # Read the input file
+        with open(file_path, 'rb') as f:
+            text_content = f.read()
+            
+        # Check for text_parsing if original detection resulted in failure or mismatch
+        return text_parser.text_based_format_detection(text_content, detected_ext)
+    
+    return detected_ext
+            
+    
+""" 
+    for signature in signatures:
         if signature.startswith('__'): continue
         
         header_offset = signatures[signature][0] * 2
@@ -66,6 +88,7 @@ def identify_file_type(header_bytes: bytes, signatures: dict, normalised_ext: st
         return text_parser.text_based_format_detection(text_content, detected_ext)
     
     return detected_ext
+ """
 
 
 def output(detected_extension: str, declared_extension: str, normalised_extension: str) -> None:
@@ -104,10 +127,6 @@ def main():
 
     # Extract the file extension from the filename
     declared_extension = Path(file_path).suffix[1:].lower()  
-    
-    # Collect file signatures from json and parse 
-    file_signatures = get_signature_list()
-    if file_signatures is None: return
  
     # Open the input file and read the header bytes
     try:
@@ -125,7 +144,7 @@ def main():
     if normalised_extension is None: return None
     
     # Identify the actual file type using file signatures and text_parsing
-    detected_extension = identify_file_type(header_bytes, file_signatures, normalised_extension, file_path)
+    detected_extension = identify_file_type(header_bytes, normalised_extension, file_path)
 
     # Compare the declared extension with the detected file type
     output(detected_extension, declared_extension, normalised_extension)
@@ -133,3 +152,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+2500

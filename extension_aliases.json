@@ -14,6 +14,7 @@
     { "aliases": ["wma", "wmv"], "canonical": "asf" },
     { "aliases": ["mpeg", "vob"], "canonical": "m2p" },
     { "aliases": ["m4r"], "canonical": "mp4" },
+    { "aliases": ["ts"], "canonical": "mts" },
 
 
     { "__comment": "audio" },

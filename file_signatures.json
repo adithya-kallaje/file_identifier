@@ -1,331 +1,844 @@
 {
     "__comment_image": "image",
-    "424d": [0, "bmp"],
-    "49492a00": [0, "tiff"],
-    "4d4d002a": [0, "tiff"],
-    "49492a00100000004352": [0, "cr2"],
-    "4647444d": [0, "dcr"],
-    "667479706372784352": [0, "cr3"],
-    "38425053": [0, "psd"],
-    "ffd8ffdb": [0, "jpg"],
-    "ffd8ffe0": [0, "jpeg"],
-    "89504e470d0a1a0a": [0, "png"],
-    "57454250": [8, "webp"],
-    "00000100": [0, "ico"],
-    "69636e73": [0, "icns"],
-    "425047fb": [0, "bpg"],
-    "464c4946": [0, "flif"],
-    "716f6966": [0, "qoi"],
-    "0000000c4a584c200d0a870a": [0, "jxl"],
-    "0000000c6a5020200d0a870a": [0, "jp2"],
-    "762f3101": [0, "exr"],
-    "53445058": [0, "dpx"],
-    "802a5fd7": [0, "cin"],
-    "8a4d4e470d0a1a0a": [0, "mng"],
-    "59a66a95": [0, "ras"],
-    "50310a": [0, "pbm"],
-    "50320a": [0, "pgm"],
-    "50330a": [0, "ppm"],
-    "50340a": [0, "pbm"],
-    "50350a": [0, "pgm"],
-    "50360a": [0, "ppm"],
-    "50370a": [0, "pam"],
-    "01da": [0, "sgi"],
-    "233f52414449414e43450a": [0, "hdr"],
-    "233f524742450a": [0, "hdr"],
-    "65877856": [0, "p25"],
-    "41474433": [0, "fh8"],
-    "cf8401": [0, "lep"],
-    "23646566696e6520": [0, "xbm"],
-    "2f2a2058504d202a2f": [0, "xpm"],
-    "6674797068656963": [4, "heif"],
-    "667479706d69": [4, "heic"],
-    "0a02": [0, "pcx"],
-    "0a03": [0, "pcx"],
-    "0a05": [0, "pcx"],
-    "44445320": [0, "dds"],
-    "5046": [0, "pfm"],
-    "01010000": [1, "tga"],
-    "00020000": [1, "tga"],
-    "00030000": [1, "tga"],
-    "49495500": [0, "rw2"],
-    "5043445f495049": [2048, "pcd"],
+    "bmp": [
+        {"offset": 0, "signature": "424d"}
+    ],
+    "tiff": [
+        {"offset": 0, "signature": "49492a00"},
+        {"offset": 0, "signature": "4d4d002a"}
+    ],
+    "cr2": [
+        {"offset": 0, "signature": "49492a00100000004352"}
+    ],
+    "dcr": [
+        {"offset": 0, "signature": "4647444d"}
+    ],
+    "cr3": [
+        {"offset": 0, "signature": "667479706372784352"}
+    ],
+    "psd": [
+        {"offset": 0, "signature": "38425053"}
+    ],
+    "jpeg": [
+        {"offset": 0, "signature": "ffd8ff"}
+    ],
+    "png": [
+        {"offset": 0, "signature": "89504e470d0a1a0a"}
+    ],
+    "webp": [
+        {"offset": 8, "signature": "57454250"}
+    ],
+    "ico": [
+        {"offset": 0, "signature": "00000100"}
+    ],
+    "icns": [
+        {"offset": 0, "signature": "69636e73"}
+    ],
+    "bpg": [
+        {"offset": 0, "signature": "425047fb"}
+    ],
+    "flif": [
+        {"offset": 0, "signature": "464c4946"}
+    ],
+    "qoi": [
+        {"offset": 0, "signature": "716f6966"}
+    ],
+    "jxl": [
+        {"offset": 0, "signature": "0000000c4a584c200d0a870a"}
+    ],
+    "jp2": [
+        {"offset": 0, "signature": "0000000c6a5020200d0a870a"}
+    ],
+    "exr": [
+        {"offset": 0, "signature": "762f3101"}
+    ],
+    "dpx": [
+        {"offset": 0, "signature": "53445058"}
+    ],
+    "cin": [
+        {"offset": 0, "signature": "802a5fd7"}
+    ],
+    "mng": [
+        {"offset": 0, "signature": "8a4d4e470d0a1a0a"}
+    ],
+    "ras": [
+        {"offset": 0, "signature": "59a66a95"}
+    ],
+    "pbm": [
+        {"offset": 0, "signature": "50310a"},
+        {"offset": 0, "signature": "50340a"}
+    ],
+    "pgm": [
+        {"offset": 0, "signature": "50320a"},
+        {"offset": 0, "signature": "50350a"}
+    ],
+    "ppm": [
+        {"offset": 0, "signature": "50330a"},
+        {"offset": 0, "signature": "50360a"}
+    ],
+    "pam": [
+        {"offset": 0, "signature": "50370a"}
+    ],
+    "sgi": [
+        {"offset": 0, "signature": "01da"}
+    ],
+    "hdr": [
+        {"offset": 0, "signature": "233f52414449414e43450a"},
+        {"offset": 0, "signature": "233f524742450a"}
+    ],
+    "p25": [
+        {"offset": 0, "signature": "65877856"}
+    ],
+    "fh8": [
+        {"offset": 0, "signature": "41474433"}
+    ],
+    "lep": [
+        {"offset": 0, "signature": "cf8401"}
+    ],
+    "xbm": [
+        {"offset": 0, "signature": "23646566696e6520"}
+    ],
+    "xpm": [
+        {"offset": 0, "signature": "2f2a2058504d202a2f"}
+    ],
+    "heif": [
+        {"offset": 4, "signature": "6674797068656963"}
+    ],
+    "heic": [
+        {"offset": 4, "signature": "667479706d69"}
+    ],
+    "pcx": [
+        {"offset": 0, "signature": "0a02"},
+        {"offset": 0, "signature": "0a03"},
+        {"offset": 0, "signature": "0a05"}
+    ],
+    "dds": [
+        {"offset": 0, "signature": "44445320"}
+    ],
+    "pfm": [
+        {"offset": 0, "signature": "5046"}
+    ],
+    "tga": [
+        {"offset": 1, "signature": "01010000"},
+        {"offset": 1, "signature": "00020000"},
+        {"offset": 1, "signature": "00030000"}
+    ],
+    "rw2": [
+        {"offset": 0, "signature": "49495500"}
+    ],
+    "pcd": [
+        {"offset": 2048, "signature": "5043445f495049"}
+    ],
+
 
     "__comment_video": "video",
-    "000001b3": [0, "mpeg"],
-    "000001ba": [0, "m2p"],
-    "415649204c495354": [8, "avi"],
-    "1a45dfa3": [0, "mkv"],
-    "464c56": [0, "flv"],
-    "435753": [0, "swf"],
-    "465753": [0, "swf"],
-    "3026b2758e66cf11a6d900aa0062ce6c": [0, "asf"],
-    "2e524d46": [0, "rm"],
-    "4d4c5649": [0, "mlv"],
-    "060e2b3402050101": [0, "mxf"],
-    "b7d80020": [0, "wtv"],
-    "31304c46": [0, "flm"],
-    "667479703367": [4, "3gp"],
-    "667479704d345620": [4, "m4v"],
-    "6674797071742020": [4, "mov"],
-    "6d6f6f76": [4, "mov"],
-    "66726565": [4, "mov"],
-    "6d646174": [4, "mov"],
-    "77696465": [4, "mov"],
-    "706e6f74": [4, "mov"],
-    "736b6970": [4, "mov"],
-    "6674797069736f6d": [4, "mp4"],
-    "6674797066347620": [0, "f4v"],
-    "63616666": [0, "caf"],
-    "52494646": [0, "wav"],
-    "32424954": [0, "avr"],
-    "47": [4, "m2ts"],
+    "mpeg": [
+        {"offset": 0, "signature": "000001b3"}
+    ],
+    "m2p": [
+        {"offset": 0, "signature": "000001ba"}
+    ],
+    "avi": [
+        {"offset": 8, "signature": "415649204c495354"}
+    ],
+    "mkv": [
+        {"offset": 0, "signature": "1a45dfa3"}
+    ],
+    "flv": [
+        {"offset": 0, "signature": "464c56"}
+    ],
+    "swf": [
+        {"offset": 0, "signature": "435753"},
+        {"offset": 0, "signature": "465753"}
+    ],
+    "asf": [
+        {"offset": 0, "signature": "3026b2758e66cf11a6d900aa0062ce6c"}
+    ],
+    "rm": [
+        {"offset": 0, "signature": "2e524d46"}
+    ],
+    "mlv": [
+        {"offset": 0, "signature": "4d4c5649"}
+    ],
+    "mxf": [
+        {"offset": 0, "signature": "060e2b3402050101"}
+    ],
+    "wtv": [
+        {"offset": 0, "signature": "b7d80020"}
+    ],
+    "flm": [
+        {"offset": 0, "signature": "31304c46"}
+    ],
+    "3gp": [
+        {"offset": 4, "signature": "667479703367"}
+    ],
+    "m4v":[
+        {"offset": 4, "signature": "667479704d345620"}
+    ],
+    "mov": [
+        {"offset": 4, "signature": "6674797071742020"},
+        {"offset": 4, "signature": "6d6f6f76"},
+        {"offset": 4, "signature": "66726565"},
+        {"offset": 4, "signature": "6d646174"},
+        {"offset": 4, "signature": "77696465"},
+        {"offset": 4, "signature": "706e6f74"},
+        {"offset": 4, "signature": "736b6970"}
+    ],
+    "mp4": [
+        {"offset": 4, "signature": "6674797069736f6d"}
+    ],
+    "f4v": [
+        {"offset": 4, "signature": "6674797066347620"}
+    ],
+    "caf": [
+        {"offset": 0, "signature": "63616666"}
+    ],
+    "wav": [
+        {"offset": 0, "signature": "52494646"},
+        {"offset": 0, "signature": "57415645"}
+    ],
+    "avr": [
+        {"offset": 0, "signature": "32424954"}
+    ],
+    "m2ts": [
+        {"offset": 4, "signature": "47"}
+    ],
+    "mts": [
+        {"offset": 0, "signature": "47"}
+    ],
+
 
     "__comment_audio": "audio",
-    "494433": [0, "mp3"],
-    "57415645": [0, "wav"],
-    "664c6143": [0, "flac"],
-    "fff1": [0, "aac"],
-    "fff9": [0, "aac"],
-    "4f676753": [0, "ogg"],
-    "2e736e64": [0, "au"],
-    "2321414d52": [0, "amr"],
-    "514c434d": [0, "qcp"],
-    "43444441": [0, "cda"],
-    "4d546864": [0, "mid"],
-    "437265617469766520566f6963652046696c651a1a00": [0, "voc"],
-    "414c617753": [0, "wve"],
-    "4c4d38393533": [0, "txw"],
-    "0300000041505052": [0, "adx"],
-    "53494d504c4520203d": [0, "fts"],
-    "6d646600": [0, "m"],
-    "667479704d344120": [4, "m4a"],
-    "464f524d": [0, "aiff"],
-    "0b77": [0, "ac3"],
-    "fff2": [0, "mp2"],
-    "fff3": [0, "mp2"],
-    "fff4": [0, "mp2"],
-    "fff5": [0, "mp2"],
-    "fff6": [0, "mp2"],
-    "fff7": [0, "mp2"],
-    "fffa": [0, "mp2"],
-    "fffb": [0, "mp2"],
-    "fffc": [0, "mp2"],
-    "fffd": [0, "mp2"],
-    "ffe3": [0, "mp2"],
-    "ffff": [0, "mp2"],
-    "464f524d........38535658": [0, "8svx"],
-    "464f524d........4d415544": [0, "maud"],
-    "7ffe8001": [0, "dts"],
-    "54544131": [0, "tta"],
-    "726966662e91cf11": [0, "w64"],
-    "64a30100": [0, "ircam"],
-    "505646310a": [0, "pvf"],
-    "534f554e442053414d504c4520444154": [0, "smp"],
-    "534f554e441a": [0, "sndt"],
-    "4e4953545f31410a": [0, "sph"],
+    "mp3": [
+        {"offset": 0, "signature": "494433"}
+    ],
+    "flac": [
+        {"offset": 0, "signature": "664c6143"}
+    ],
+    "aac": [
+        {"offset": 0, "signature": "fff1"},
+        {"offset": 0, "signature": "fff9"}
+    ],
+    "ogg": [
+        {"offset": 0, "signature": "4f676753"}
+    ],
+    "au": [
+        {"offset": 0, "signature": "2e736e64"}
+    ],
+    "amr": [
+        {"offset": 0, "signature": "2321414d52"}
+    ],
+    "qcp": [
+        {"offset": 0, "signature": "514c434d"}
+    ],
+    "cda": [
+        {"offset": 0, "signature": "43444441"}
+    ],
+    "mid": [
+        {"offset": 0, "signature": "4d546864"}
+    ],
+    "voc": [
+        {"offset": 0, "signature": "437265617469766520566f6963652046696c651a1a00"}
+    ],
+    "wve": [
+        {"offset": 0, "signature": "414c617753"}
+    ],
+    "txw": [
+        {"offset": 0, "signature": "4c4d38393533"}
+    ],
+    "adx": [
+        {"offset": 0, "signature": "0300000041505052"}
+    ],
+    "fts": [
+        {"offset": 0, "signature": "53494d504c4520203d"}
+    ],
+    "m": [
+        {"offset": 0, "signature": "6d646600"}
+    ],
+    "m4a": [
+        {"offset": 4, "signature": "667479704d344120"}
+    ],
+    "aiff": [
+        {"offset": 0, "signature": "464f524d"}
+    ],
+    "ac3": [
+        {"offset": 0, "signature": "0b77"}
+    ],
+    "mp2": [
+        {"offset": 0, "signature": "fff2"},
+        {"offset": 0, "signature": "fff3"},
+        {"offset": 0, "signature": "fff4"},
+        {"offset": 0, "signature": "fff5"},
+        {"offset": 0, "signature": "fff6"},
+        {"offset": 0, "signature": "fff7"},
+        {"offset": 0, "signature": "fffa"},
+        {"offset": 0, "signature": "fffb"},
+        {"offset": 0, "signature": "fffc"},
+        {"offset": 0, "signature": "fffd"},
+        {"offset": 0, "signature": "ffe3"},
+        {"offset": 0, "signature": "ffff"}
+    ],
+    "8svx": [
+        {"offset": 0, "signature": "464f524d........38535658"}
+    ],
+    "maud": [
+        {"offset": 0, "signature": "464f524d........4d415544"}
+    ],
+    "dts": [
+        {"offset": 0, "signature": "7ffe8001"}
+    ],
+    "tta": [
+        {"offset": 0, "signature": "54544131"}
+    ],
+    "w64": [
+        {"offset": 0, "signature": "726966662e91cf11"}
+    ],
+    "ircam": [
+        {"offset": 0, "signature": "64a30100"}
+    ],
+    "pvf": [
+        {"offset": 0, "signature": "505646310a"}
+    ],
+    "smp": [
+        {"offset": 0, "signature": "534f554e442053414d504c4520444154"}
+    ],
+    "sndt": [
+        {"offset": 0, "signature": "534f554e441a"}
+    ],
+    "sph": [
+        {"offset": 0, "signature": "4e4953545f31410a"}
+    ],
+
 
     "__comment_document": "document",
-    "255044462d": [0, "pdf"],
-    "d0cf11e0a1b11ae1": [0, "doc"],
-    "0d444f43": [0, "doc"],
-    "7b5c72746631": [0, "rtf"],
-    "25215053": [0, "ps"],
-    "252150532d41646f62652d332e3020455053462d332e30": [0, "eps"],
-    "252150532d41646f62652d332e3120455053462d332e30": [0, "eps"],
-    "4c00520046000000": [0, "lrf"],
-    "534e425030303042": [0, "snb"],
-    "41542654464f524d": [0, "djvu"],
-    "0606edf5d81d46e5bd31efe7fe74b71d": [0, "indd"],
-    "4241434b4d494b454449534b": [0, "bac"],
-    "52656365697665643a": [0, "eml"],
-    "495453460300000060000000": [0, "chm"],
-    "0f534942454c495553": [0, "sib"],
+    "pdf": [
+        {"offset": 0, "signature": "255044462d"}
+    ],
+    "doc": [
+        {"offset": 0, "signature": "d0cf11e0a1b11ae1"},
+        {"offset": 0, "signature": "0d444f43"}
+    ],
+    "rtf": [
+        {"offset": 0, "signature": "7b5c72746631"}
+    ],
+    "ps": [
+        {"offset": 0, "signature": "25215053"}
+    ],
+    "eps": [
+        {"offset": 0, "signature": "252150532d41646f62652d332e3020455053462d332e30"},
+        {"offset": 0, "signature": "252150532d41646f62652d332e3120455053462d332e30"}
+    ],
+    "lrf": [
+        {"offset": 0, "signature": "4c00520046000000"}
+    ],
+    "snb": [
+        {"offset": 0, "signature": "534e425030303042"}
+    ],
+    "djvu": [
+        {"offset": 0, "signature": "41542654464f524d"}
+    ],
+    "indd": [
+        {"offset": 0, "signature": "0606edf5d81d46e5bd31efe7fe74b71d"}
+    ],
+    "bac": [
+        {"offset": 0, "signature": "4241434b4d494b454449534b"}
+    ],
+    "eml": [
+        {"offset": 0, "signature": "52656365697665643a"}
+    ],
+    "chm": [
+        {"offset": 0, "signature": "495453460300000060000000"}
+    ],
+    "sib": [
+        {"offset": 0, "signature": "0f534942454c495553"}
+    ],
+
 
     "__comment_font": "font",
-    "0001000000": [0, "ttf"],
-    "4f54544f": [0, "otf"],
-    "774f4632": [0, "woff2"],
-    "774f4646": [0, "woff"],
-    "8001": [0, "pfb"],
+    "ttf": [
+        {"offset": 0, "signature": "0001000000"}
+    ],
+    "otf": [
+        {"offset": 0, "signature": "4f54544f"}
+    ],
+    "woff2": [
+        {"offset": 0, "signature": "774f4632"}
+    ],
+    "woff": [
+        {"offset": 0, "signature": "774f4646"}
+    ],
+    "pfb": [
+        {"offset": 0, "signature": "8001"}
+    ],
+
 
     "__comment_archive": "archive",
-    "504b0304": [0, "zip"],
-    "1f8b": [0, "gz"],
-    "425a68": [0, "bz2"],
-    "fd377a585a00": [0, "xz"],
-    "28b52ffd": [0, "zst"],
-    "377abcaf271c": [0, "7z"],
-    "526172211a0700": [0, "rar"],
-    "526172211a070100": [0, "rar"],
-    "1f9d": [0, "z"],
-    "1fa0": [0, "z"],
-    "60ea": [0, "arj"],
-    "5a4f4f": [0, "zoo"],
-    "4c5a4950": [0, "lz"],
-    "62767832": [0, "lzfse"],
-    "04224d18": [0, "lz4"],
-    "78617221": [0, "xar"],
-    "303730373031": [0, "cpio"],
-    "303730373032": [0, "cpio"],
-    "303730373037": [0, "cpio"],
-    "1a08": [0, "arc"],
-    "415243": [0, "arc"],
-    "417243": [0, "arc"],
-    "455646": [0, "e01"],
-    "45564632": [0, "ex01"],
-    "213c617263683e0a": [0, "deb"],
-    "edabeedb": [0, "rpm"],
-    "49536328": [0, "cab"],
-    "4d534346": [0, "cab"],
-    "4b504b41": [0, "pak"],
-    "49574144": [0, "wad"],
-    "444141": [0, "daa"],
-    "7801": [0, "zlib"],
-    "49735a21": [0, "isz"],
+    "zip": [
+        {"offset": 0, "signature": "504b0304"}
+    ],
+    "gz": [
+        {"offset": 0, "signature": "1f8b"}
+    ],
+    "bz2": [
+        {"offset": 0, "signature": "425a68"}
+    ],
+    "xz": [
+        {"offset": 0, "signature": "fd377a585a00"}
+    ],
+    "zst": [
+        {"offset": 0, "signature": "28b52ffd"}
+    ],
+    "7z": [
+        {"offset": 0, "signature": "377abcaf271c"}
+    ],
+    "rar": [
+        {"offset": 0, "signature": "526172211a0700"},
+        {"offset": 0, "signature": "526172211a070100"}
+    ],
+    "z": [
+        {"offset": 0, "signature": "1f9d"},
+        {"offset": 0, "signature": "1fa0"}
+    ],
+    "arj": [
+        {"offset": 0, "signature": "60ea"}
+    ],
+    "zoo": [
+        {"offset": 0, "signature": "5a4f4f"}
+    ],
+    "lz": [
+        {"offset": 0, "signature": "4c5a4950"}
+    ],
+    "lzfse": [
+        {"offset": 0, "signature": "62767832"}
+    ],
+    "lz4": [
+        {"offset": 0, "signature": "04224d18"}
+    ],
+    "xar": [
+        {"offset": 0, "signature": "78617221"}
+    ],
+    "cpio": [
+        {"offset": 0, "signature": "303730373031"},
+        {"offset": 0, "signature": "303730373032"},
+        {"offset": 0, "signature": "303730373037"}
+    ],
+    "arc": [
+        {"offset": 0, "signature": "1a08"},
+        {"offset": 0, "signature": "415243"},
+        {"offset": 0, "signature": "417243"}
+    ],
+    "e01": [
+        {"offset": 0, "signature": "455646"}
+    ],
+    "ex01": [
+        {"offset": 0, "signature": "45564632"}
+    ],
+    "deb": [
+        {"offset": 0, "signature": "213c617263683e0a"}
+    ],
+    "rpm": [
+        {"offset": 0, "signature": "edabeedb"}
+    ],
+    "cab": [
+        {"offset": 0, "signature": "49536328"},
+        {"offset": 0, "signature": "4d534346"}
+    ],
+    "pak": [
+        {"offset": 0, "signature": "4b504b41"}
+    ],
+    "wad": [
+        {"offset": 0, "signature": "49574144"}
+    ],
+    "daa": [
+        {"offset": 0, "signature": "444141"}
+    ],
+    "zlib": [
+        {"offset": 0, "signature": "7801"}
+    ],
+    "isz": [
+        {"offset": 0, "signature": "49735a21"}
+    ],
+
 
     "__comment_executable": "executable",
-    "4d5a": [0, "exe"],
-    "5a4d": [0, "exe"],
-    "c9": [0, "com"],
-    "7f454c46": [0, "elf"],
-    "cafebabe": [0, "class"],
-    "6465780a30333500": [0, "dex"],
-    "1b4c7561": [0, "luac"],
-    "23407e5e": [0, "vbe"],
-    "d04f5053": [0, "pl"],
-    "4e4553": [0, "nes"],
-    "4e45531a": [0, "nes"],
-    "0061736d": [0, "wasm"],
-    "43723234": [0, "crx"],
+    "exe": [
+        {"offset": 0, "signature": "4d5a"},
+        {"offset": 0, "signature": "5a4d"}
+    ],
+    "com": [
+        {"offset": 0, "signature": "c9"}
+    ],
+    "elf": [
+        {"offset": 0, "signature": "7f454c46"}
+    ],
+    "class": [
+        {"offset": 0, "signature": "cafebabe"}
+    ],
+    "dex": [
+        {"offset": 0, "signature": "6465780a30333500"}
+    ],
+    "luac": [
+        {"offset": 0, "signature": "1b4c7561"}
+    ],
+    "vbe": [
+        {"offset": 0, "signature": "23407e5e"}
+    ],
+    "pl": [
+        {"offset": 0, "signature": "d04f5053"}
+    ],
+    "nes": [
+        {"offset": 0, "signature": "4e4553"},
+        {"offset": 0, "signature": "4e45531a"}
+    ],
+    "wasm": [
+        {"offset": 0, "signature": "0061736d"}
+    ],
+    "crx": [
+        {"offset": 0, "signature": "43723234"}
+    ],
+    "fap": [
+        {"offset": 0, "signature": "66617020"}
+    ],
+
 
     "__comment_disk_image": "disk image",
-    "4b444d": [0, "vmdk"],
-    "23204469736b2044657363726970746f": [0, "vmdk"],
-    "636f6e6563746978": [0, "vhd"],
-    "7668647866696c65": [0, "vhdx"],
-    "514649": [0, "qcow"],
-    "455202000000": [0, "toast"],
-    "4d5357494d000000d000000000": [0, "wim"],
+    "vmdk": [
+        {"offset": 0, "signature": "4b444d"},
+        {"offset": 0, "signature": "23204469736b2044657363726970746f"},
+        {"offset": 0, "signature": "23204469736b2044657363726970746f72"}
+    ],
+    "vhd": [
+        {"offset": 0, "signature": "636f6e6563746978"}
+    ],
+    "vhdx": [
+        {"offset": 0, "signature": "7668647866696c65"}
+    ],
+    "qcow": [
+        {"offset": 0, "signature": "514649"}
+    ],
+    "toast": [
+        {"offset": 0, "signature": "455202000000"}
+    ],
+    "wim": [
+        {"offset": 0, "signature": "4d5357494d000000d000000000"}
+    ],
+
 
     "__comment_security": "security",
-    "2d2d2d2d2d424547494e2043455254494649434154452d2d2d2d2d": [0, "crt"],
-    "43363420434152545249444745202020": [0, "crt"],
-    "2d2d2d2d2d424547494e20434552544946494341544520524551554553542d2d2d2d2d": [0, "csr"],
-    "2d2d2d2d2d424547494e2050524956415445204b45592d2d2d2d2d": [0, "key"],
-    "2d2d2d2d2d424547494e204453412050524956415445204b45592d2d2d2d2d": [0, "key"],
-    "2d2d2d2d2d424547494e205253412050524956415445204b45592d2d2d2d2d": [0, "key"],
-    "2d2d2d2d2d424547494e2053534832204b45592d2d2d2d2d": [0, "pub"],
-    "2d2d2d2d2d424547494e20504750205055424c4943204b454920424c4f434b2d2d2d2d2d": [0, "asc"],
-    "50755454592d557365722d4b65792d46696c652d323a": [0, "ppk"],
-    "50755454592d557365722d4b65792d46696c652d333a": [0, "ppk"],
-    "3748030200000000583530394b4559": [0, "kdb"],
+    "crt": [
+        {"offset": 0, "signature": "2d2d2d2d2d424547494e2043455254494649434154452d2d2d2d2d"},
+        {"offset": 0, "signature": "43363420434152545249444745202020"}
+    ],
+    "csr": [
+        {"offset": 0, "signature": "2d2d2d2d2d424547494e20434552544946494341544520524551554553542d2d2d2d2d"}
+    ],
+    "key": [
+        {"offset": 0, "signature": "2d2d2d2d2d424547494e2050524956415445204b45592d2d2d2d2d"},
+        {"offset": 0, "signature": "2d2d2d2d2d424547494e204453412050524956415445204b45592d2d2d2d2d"},
+        {"offset": 0, "signature": "2d2d2d2d2d424547494e205253412050524956415445204b45592d2d2d2d2d"}
+    ],
+    "pub": [
+        {"offset": 0, "signature": "2d2d2d2d2d424547494e2053534832204b45592d2d2d2d2d"}
+    ],
+    "asc": [
+        {"offset": 0, "signature": "2d2d2d2d2d424547494e20504750205055424c4943204b454920424c4f434b2d2d2d2d2d"}
+    ],
+    "ppk": [
+        {"offset": 0, "signature": "50755454592d557365722d4b65792d46696c652d323a"},
+        {"offset": 0, "signature": "50755454592d557365722d4b65792d46696c652d333a"}
+    ],
+    "kdb": [
+        {"offset": 0, "signature": "3748030200000000583530394b4559"}
+    ],
 
+    
     "__comment_data": "data",
-    "53514c69746520666f726d6174203300": [0, "sqlitedb"],
-    "62706c697374": [0, "plist"],
-    "4d3cb2a1": [0, "pcap"],
-    "d4c3b2a1": [0, "pcap"],
-    "0a0d0d0a": [0, "pcapng"],
-    "2142444e": [0, "pst"],
-    "0e031301": [0, "hdf4"],
-    "000100004d534953414d204461746162617365": [0, "mny"],
-    "000100005374616e6461726420414345204442": [0, "accdb"],
-    "000100005374616e64617264204a6574204442": [0, "mdb"],
-    "20020162a01eab0702000000": [0, "tde"],
-    "00001a00051004": [0, "123"],
-    "00001a000010040000000000": [0, "wk3"],
-    "00001a000210040000000000": [0, "wk4"],
-    "0000020006040600080000000000": [0, "wk1"],
-    "0e574b53": [0, "wks"],
-    "72656766": [0, "dat"],
-    "4f626a01": [0, "avro"],
-    "47524942": [0, "grib"],
+    "sqlitedb": [
+        {"offset": 0, "signature": "53514c69746520666f726d6174203300"}
+    ],
+    "plist": [
+        {"offset": 0, "signature": "62706c697374"}
+    ],
+    "pcap": [
+        {"offset": 0, "signature": "4d3cb2a1"},
+        {"offset": 0, "signature": "d4c3b2a1"}
+    ],
+    "pcapng": [
+        {"offset": 0, "signature": "0a0d0d0a"}
+    ],
+    "pst": [
+        {"offset": 0, "signature": "2142444e"}
+    ],
+    "hdf4": [
+        {"offset": 0, "signature": "0e031301"}
+    ],
+    "mny": [
+        {"offset": 0, "signature": "000100004d534953414d204461746162617365"}
+    ],
+    "accdb": [
+        {"offset": 0, "signature": "000100005374616e6461726420414345204442"}
+    ],
+    "mdb": [
+        {"offset": 0, "signature": "000100005374616e64617264204a6574204442"}
+    ],
+    "tde": [
+        {"offset": 0, "signature": "20020162a01eab0702000000"}
+    ],
+    "123": [
+        {"offset": 0, "signature": "00001a00051004"}
+    ],
+    "wk3": [
+        {"offset": 0, "signature": "00001a000010040000000000"}
+    ],
+    "wk4": [
+        {"offset": 0, "signature": "00001a000210040000000000"}
+    ],
+    "wk1": [
+        {"offset": 0, "signature": "0000020006040600080000000000"}
+    ],
+    "wks": [
+        {"offset": 0, "signature": "0e574b53"}
+    ],
+    "dat": [
+        {"offset": 0, "signature": "72656766"},
+        {"offset": 0, "signature": "504d4f43434d4f43"}
+    ],
+    "avro": [
+        {"offset": 0, "signature": "4f626a01"}
+    ],
+    "grib": [
+        {"offset": 0, "signature": "47524942"}
+    ],
+
 
     "__comment_code": "code & markup",
-    "23696e636c756465": [0, "c"],
-    "3c3f706870": [0, "php"],
-    "3c68746d6c": [0, "html"],
-    "3c3f786d6c": [0, "xml"],
-    "2d2d2d0a": [0, "yaml"],
-    "234558544d3355": [0, "m3u"],
-    "232153494c4b0a": [0, "sil"],
-    "0764743264647464": [0, "dtd"],
-    "3a290a": [0, "sml"],
+    "c": [
+        {"offset": 0, "signature": "23696e636c756465"}
+    ],
+    "php": [
+        {"offset": 0, "signature": "3c3f706870"}
+    ],
+    "html": [
+        {"offset": 0, "signature": "3c68746d6c"}
+    ],
+    "xml": [
+        {"offset": 0, "signature": "3c3f786d6c"}
+    ],
+    "yaml": [
+        {"offset": 0, "signature": "2d2d2d0a"}
+    ],
+    "m3u": [
+        {"offset": 0, "signature": "234558544d3355"}
+    ],
+    "sil": [
+        {"offset": 0, "signature": "232153494c4b0a"}
+    ],
+    "dtd": [
+        {"offset": 0, "signature": "0764743264647464"}
+    ],
+    "sml": [
+        {"offset": 0, "signature": "3a290a"}
+    ],
+
 
     "__comment_3d_geo": "3d & geospatial",
-    "424c454e444552": [0, "blend"],
-    "4153544d2d453537": [0, "e57"],
-    "445241434f": [0, "drc"],
-    "2350455330303031": [0, "pes"],
+    "blend": [
+        {"offset": 0, "signature": "424c454e444552"}
+    ],
+    "e57": [
+        {"offset": 0, "signature": "4153544d2d453537"}
+    ],
+    "drc": [
+        {"offset": 0, "signature": "445241434f"}
+    ],
+    "pes": [
+        {"offset": 0, "signature": "2350455330303031"}
+    ],
+
 
     "__comment_text": "text & document interchange",
-    "feff": [0, "txt"],
-    "fffe": [0, "txt"],
-    "0efeff": [0, "txt"],
-    "0000feff": [0, "txt"],
-    "fffe0000": [0, "txt"],
-    "efbbbf": [0, "txt"],
-    "3f5f": [0, "hlp"],
+    "txt": [
+        {"offset": 0, "signature": "feff"},
+        {"offset": 0, "signature": "fffe"},
+        {"offset": 0, "signature": "0efeff"},
+        {"offset": 0, "signature": "0000feff"},
+        {"offset": 0, "signature": "fffe0000"},
+        {"offset": 0, "signature": "efbbbf"}
+    ],
+    "hlp": [
+        {"offset": 0, "signature": "3f5f"}
+    ],
+
 
     "__comment_system": "system & misc",
-    "414646": [0, "aff"],
-    "4f5243": [0, "orc"],
-    "785634": [0, "pbt"],
-    "8c0a00": [0, "ucas"],
-    "07534b46": [0, "skf"],
-    "4c664c65": [0, "evt"],
-    "456c6646696c65": [0, "evtx"],
-    "4d494c20": [0, "stg"],
-    "4d563933": [0, "dir"],
-    "494e4458": [0, "idx"],
-    "504d4343": [0, "grp"],
-    "50575333": [0, "psafe3"],
-    "53455136": [0, "rc"],
-    "53503031": [0, "bin"],
-    "54444546": [0, "tdef"],
-    "5555aaaa": [0, "pcv"],
-    "746f7833": [0, "tox"],
-    "7c618ab2": [0, "hpapp"],
-    "aaaaaaaa": [0, "sys"],
-    "bebafeca": [0, "dba"],
-    "00014244": [0, "dba"],
-    "00014454": [0, "tda"],
-    "d7cdc69a": [0, "wmf"],
-    "0df01dc0": [0, "cdb"],
-    "3412aa55": [0, "vpk"],
-    "435a5058": [0, "czx"],
-    "454d5533": [0, "ez3"],
-    "454d5832": [0, "ez2"],
-    "4b434d53": [0, "icm"],
-    "464c6864": [0, "flp"],
-    "4c504b5348485248": [0, "journal"],
-    "504d4f43434d4f43": [0, "dat"],
-    "5253564b44415441": [0, "rs"],
-    "534d534e46323030": [0, "ssp"],
-    "43504348": [0, "pch"],
-    "02647373": [0, "dss"],
-    "03647373": [0, "dss"],
-    "4253444946463430": [0, "bsdiff"],
-    "43363446696c6500": [0, "p00"],
-    "4753522d31353431": [0, "g64"],
-    "485a4c5200000018": [0, "hazelrules"],
-    "212d31534c4f421f": [0, "slob"],
-    "3c726f626c6f7821": [0, "rbxl"],
-    "6d61696e2e6273": [0, "mgw"],
-    "70777264617461": [0, "pwrdata"],
-    "0e4e65726f49534f": [0, "nri"],
-    "626f6f6b000000006d61726b00000000": [0, "alias"],
-    "0a166f72672e626974636f696e2e7072": [0, "wallet"],
-    "2d3d3d2d2d3d3d2d2d3d3d2d2d3d3d2d": [0, "utoc"],
-    "23204d6963726f736f667420446576656c6f7065722053747564696f": [0, "dsp"],
-    "01ff02040302": [0, "drw"],
-    "3a4261736520": [0, "cnt"],
-    "02005a57525400000000000000000000": [0, "cwk"],
-    "433634207461706520696d6167652066696c65": [0, "t64"],
-    "23204469736b2044657363726970746f72": [0, "vmdk"],
-    "47494638": [0, "gif"],
+    "aff": [
+        {"offset": 0, "signature": "414646"}
+    ],
+    "orc": [
+        {"offset": 0, "signature": "4f5243"}
+    ],
+    "pbt": [
+        {"offset": 0, "signature": "785634"}
+    ],
+    "ucas": [
+        {"offset": 0, "signature": "8c0a00"}
+    ],
+    "skf": [
+        {"offset": 0, "signature": "07534b46"}
+    ],
+    "evt": [
+        {"offset": 0, "signature": "4c664c65"}
+    ],
+    "evtx": [
+        {"offset": 0, "signature": "456c6646696c65"}
+    ],
+    "stg": [
+        {"offset": 0, "signature": "4d494c20"}
+    ],
+    "dir": [
+        {"offset": 0, "signature": "4d563933"}
+    ],
+    "idx": [
+        {"offset": 0, "signature": "494e4458"}
+    ],
+    "grp": [
+        {"offset": 0, "signature": "504d4343"}
+    ],
+    "psafe3": [
+        {"offset": 0, "signature": "50575333"}
+    ],
+    "rc": [
+        {"offset": 0, "signature": "53455136"}
+    ],
+    "bin": [
+        {"offset": 0, "signature": "53503031"}
+    ],
+    "tdef": [
+        {"offset": 0, "signature": "54444546"}
+    ],
+    "pcv": [
+        {"offset": 0, "signature": "5555aaaa"}
+    ],
+    "tox": [
+        {"offset": 0, "signature": "746f7833"}
+    ],
+    "hpapp": [
+        {"offset": 0, "signature": "7c618ab2"}
+    ],
+    "sys": [
+        {"offset": 0, "signature": "aaaaaaaa"}
+    ],
+    "dba": [
+        {"offset": 0, "signature": "bebafeca"},
+        {"offset": 0, "signature": "00014244"}
+    ],
+    "tda": [
+        {"offset": 0, "signature": "00014454"}
+    ],
+    "wmf": [
+        {"offset": 0, "signature": "d7cdc69a"}
+    ],
+    "cdb": [
+        {"offset": 0, "signature": "0df01dc0"}
+    ],
+    "vpk": [
+        {"offset": 0, "signature": "3412aa55"}
+    ],
+    "czx": [
+        {"offset": 0, "signature": "435a5058"}
+    ],
+    "ez3": [
+        {"offset": 0, "signature": "454d5533"}
+    ],
+    "ez2": [
+        {"offset": 0, "signature": "454d5832"}
+    ],
+    "icm": [
+        {"offset": 0, "signature": "4b434d53"}
+    ],
+    "flp": [
+        {"offset": 0, "signature": "464c6864"}
+    ],
+    "journal": [
+        {"offset": 0, "signature": "4c504b5348485248"}
+    ],
+    "rs": [
+        {"offset": 0, "signature": "5253564b44415441"}
+    ],
+    "ssp": [
+        {"offset": 0, "signature": "534d534e46323030"}
+    ],
+    "pch": [
+        {"offset": 0, "signature": "43504348"}
+    ],
+    "dss": [
+        {"offset": 0, "signature": "02647373"},
+        {"offset": 0, "signature": "03647373"}
+    ],
+    "bsdiff": [
+        {"offset": 0, "signature": "4253444946463430"}
+    ],
+    "p00": [
+        {"offset": 0, "signature": "43363446696c6500"}
+    ],
+    "g64": [
+        {"offset": 0, "signature": "4753522d31353431"}
+    ],
+    "hazelrules": [
+        {"offset": 0, "signature": "485a4c5200000018"}
+    ],
+    "slob": [
+        {"offset": 0, "signature": "212d31534c4f421f"}
+    ],
+    "rbxl": [
+        {"offset": 0, "signature": "3c726f626c6f7821"}
+    ],
+    "mgw": [
+        {"offset": 0, "signature": "6d61696e2e6273"}
+    ],
+    "pwrdata": [
+        {"offset": 0, "signature": "70777264617461"}
+    ],
+    "nri": [
+        {"offset": 0, "signature": "0e4e65726f49534f"}
+    ],
+    "alias": [
+        {"offset": 0, "signature": "626f6f6b000000006d61726b00000000"}
+    ],
+    "wallet": [
+        {"offset": 0, "signature": "0a166f72672e626974636f696e2e7072"}
+    ],
+    "utoc": [
+        {"offset": 0, "signature": "2d3d3d2d2d3d3d2d2d3d3d2d2d3d3d2d"}
+    ],
+    "dsp": [
+        {"offset": 0, "signature": "23204d6963726f736f667420446576656c6f7065722053747564696f"}
+    ],
+    "drw": [
+        {"offset": 0, "signature": "01ff02040302"}
+    ],
+    "cnt": [
+        {"offset": 0, "signature": "3a4261736520"}
+    ],
+    "cwk": [
+        {"offset": 0, "signature": "02005a57525400000000000000000000"}
+    ],
+    "t64": [
+        {"offset": 0, "signature": "433634207461706520696d6167652066696c65"}
+    ],
+    "gif": [
+        {"offset": 0, "signature": "47494638"}
+    ],
+    "paf": [
+        {"offset": 0, "signature": "20706166"}
+    ],
+    "pict": [
+        {"offset": 512, "signature": "0200"}
+    ],
+
 
     "__comment_ebook": "ebook",
-    "4d4f4249": [64, "mobi"]
+    "mobi": [
+        {"offset": 64, "signature": "4d4f4249"}
+    ]
 }
