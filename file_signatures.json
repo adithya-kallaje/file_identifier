@@ -129,6 +129,15 @@
     "pcd": [
         {"offset": 2048, "signature": "5043445f495049"}
     ],
+    "gif": [
+        {"offset": 0, "signature": "47494638"}
+    ],
+    "pict": [
+        {"offset": 512, "signature": "0200"}
+    ],
+    "xwd": [
+        {"offset": 4, "signature": "00000007"}
+    ],
 
 
     "__comment_video": "video",
@@ -190,16 +199,6 @@
     "f4v": [
         {"offset": 4, "signature": "6674797066347620"}
     ],
-    "caf": [
-        {"offset": 0, "signature": "63616666"}
-    ],
-    "wav": [
-        {"offset": 0, "signature": "52494646"},
-        {"offset": 0, "signature": "57415645"}
-    ],
-    "avr": [
-        {"offset": 0, "signature": "32424954"}
-    ],
     "m2ts": [
         {"offset": 4, "signature": "47"}
     ],
@@ -248,9 +247,6 @@
     ],
     "adx": [
         {"offset": 0, "signature": "0300000041505052"}
-    ],
-    "fts": [
-        {"offset": 0, "signature": "53494d504c4520203d"}
     ],
     "m": [
         {"offset": 0, "signature": "6d646600"}
@@ -307,6 +303,19 @@
     ],
     "sph": [
         {"offset": 0, "signature": "4e4953545f31410a"}
+    ],
+    "caf": [
+        {"offset": 0, "signature": "63616666"}
+    ],
+    "wav": [
+        {"offset": 0, "signature": "52494646"},
+        {"offset": 0, "signature": "57415645"}
+    ],
+    "avr": [
+        {"offset": 0, "signature": "32424954"}
+    ],
+    "paf": [
+        {"offset": 0, "signature": "20706166"}
     ],
 
 
@@ -609,6 +618,9 @@
     "grib": [
         {"offset": 0, "signature": "47524942"}
     ],
+    "fts": [
+        {"offset": 0, "signature": "53494d504c4520203d"}
+    ],
 
 
     "__comment_code": "code & markup",
@@ -826,19 +838,16 @@
     "t64": [
         {"offset": 0, "signature": "433634207461706520696d6167652066696c65"}
     ],
-    "gif": [
-        {"offset": 0, "signature": "47494638"}
+    "prc": [
+        {"offset": 0, "signature": "37000010"}
     ],
-    "paf": [
-        {"offset": 0, "signature": "20706166"}
-    ],
-    "pict": [
-        {"offset": 512, "signature": "0200"}
-    ],
-
+    
 
     "__comment_ebook": "ebook",
     "mobi": [
         {"offset": 64, "signature": "4d4f4249"}
+    ],
+    "pdb": [
+        {"offset": 60, "signature": "5445587452454164"}
     ]
 }

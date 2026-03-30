@@ -8,6 +8,7 @@
     { "aliases": ["cur", "dfont"], "canonical": "ico" },
     { "aliases": ["picon"], "canonical": "xpm" },
 
+
     { "__comment": "video" },
     { "aliases": ["mpg", "mpe", "m1v", "m2v"], "canonical": "mpeg" },
     { "aliases": ["webm", "mka", "mks"], "canonical": "mkv" },
@@ -25,17 +26,19 @@
     { "aliases": ["ra"], "canonical": "rm" },
     { "aliases": ["oga", "ogv", "spx", "opus"], "canonical": "ogg" },
 
+    
     { "__comment": "document" },
-    { "aliases": ["htm"], "canonical": "html" },
-    { "aliases": ["fb2"], "canonical": "xml" },
-    { "aliases": ["md", "py", "rb", "js", "ts", "java", "go", "rs", "cs", "sh", "bat", "css", "pl", "pl", "sql", "swift", "vb", "xyz", "h", "htaccess", "c"], "canonical": "txt" },
+    { "aliases": ["md", "py", "rb", "js", "java", "go", "rs", "cs", "sh", "bat", "css", "pl", "pl", "sql", "swift", "vb", "xyz", "h", "htaccess", "c"], "canonical": "txt" },
     { "aliases": ["text"], "canonical": "txt" },
-    { "aliases": ["m3u8"], "canonical": "m3u" },
     { "aliases": ["cff"], "canonical": "ps" },
     { "aliases": ["xls", "ppt"], "canonical": "doc" },
 
+
     { "__comment": "code" },
     { "aliases": ["cpp"], "canonical": "c" },
+    { "aliases": ["htm"], "canonical": "html" },
+    { "aliases": ["m3u8"], "canonical": "m3u" },
+
 
     { "__comment": "archive" },
     { "aliases": ["tgz"], "canonical": "gz" },
@@ -43,21 +46,26 @@
     { "aliases": ["txz"], "canonical": "xz" },
     { "aliases": ["zstd"], "canonical": "zst" },
     { "aliases": ["cbr"], "canonical": "rar" },
-    { "aliases": ["cbz", "docx", "epub", "odp", "ods", "odt", "ott", "xlsx"], "canonical": "zip" },
+    { "aliases": ["cbz"], "canonical": "zip" },
     { "aliases": ["cb7"], "canonical": "7z" },
+
 
     { "__comment": "executable" },
     { "aliases": ["scr"], "canonical": "exe" },
 
+
     { "__comment": "data" },
     { "aliases": ["sqlite", "sqlite3", "db", "db3"], "canonical": "sqlitedb" },
     { "aliases": ["cap"], "canonical": "pcap" },
+
 
     { "__comment": "security" },
     { "aliases": ["cer", "der", "cert"], "canonical": "crt" },
     { "aliases": ["req"], "canonical": "csr" },
     { "aliases": ["pgp", "gpg", "sig"], "canonical": "asc" },
 
+
     { "__comment": "ebook" },
-    { "aliases": ["azw3"], "canonical": "mobi" }
+    { "aliases": ["azw3"], "canonical": "mobi" },
+    { "aliases": ["fb2"], "canonical": "xml" }
 ]

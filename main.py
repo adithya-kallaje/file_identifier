@@ -3,6 +3,17 @@ import json
 from pathlib import Path
 import text_parser    
 from re import match
+from zipfile import ZipFile
+from zipfile import BadZipFile
+
+
+MIMETYPE_MAP = {                                                                                                                                                           
+    "application/epub+zip": "epub",                                                                                                                                        
+    'application/vnd.oasis.opendocument.presentation': "odp",
+    'application/vnd.oasis.opendocument.text': "odt",  
+    'application/vnd.oasis.opendocument.text-template': "ott",
+    'application/vnd.oasis.opendocument.spreadsheet': "ods",                                                                                                                                                    
+}
 
 
 def get_signature_list() -> bytes:
@@ -55,6 +66,9 @@ def identify_file_type(header_bytes: bytes, normalised_ext: str, file_path: str)
             if match(matching_signatures, header_bytes.hex()) and len(matching_signatures) > detected_ext_length:
                 detected_ext = files_types
                 detected_ext_length = len(matching_signatures)
+                
+    if detected_ext == "zip":
+        detected_ext = inspect_zip_container(file_path)
         
     if detected_ext == None or detected_ext != normalised_ext:        
         # Read the input file
@@ -65,30 +79,29 @@ def identify_file_type(header_bytes: bytes, normalised_ext: str, file_path: str)
         return text_parser.text_based_format_detection(text_content, detected_ext)
     
     return detected_ext
-            
-    
-""" 
-    for signature in signatures:
-        if signature.startswith('__'): continue
-        
-        header_offset = signatures[signature][0] * 2
-        matching_signature = '.' * header_offset + signature
-        
-        if match(matching_signature, header_bytes.hex()): 
-            detected_ext = signatures[signature][1]
-            break
-        
 
-    if detected_ext == None or detected_ext != normalised_ext:        
-        # Read the input file
-        with open(file_path, 'rb') as f:
-            text_content = f.read()
-        
-        # Check for text_parsing if original detection resulted in failure or mismatch
-        return text_parser.text_based_format_detection(text_content, detected_ext)
-    
-    return detected_ext
- """
+
+def inspect_zip_container(file_path: str) -> str | None:
+    try:
+        with ZipFile(file_path, "r") as file:
+            namelist = file.namelist()
+            
+            # Read mimetype (if it exists)
+            if "mimetype" in namelist:
+                mimetype_str = file.read("mimetype").decode() 
+                return MIMETYPE_MAP.get(mimetype_str, "zip")
+            
+            # Check for a decisive filename
+            for namelist_entry in namelist:
+                if "word/" in namelist_entry:
+                    return "docx" 
+                elif "xl/" in namelist_entry:
+                    return "xlsx"
+                        
+        return "zip"
+    except BadZipFile:
+        print("Zipfile corrupted")
+        return None
 
 
 def output(detected_extension: str, declared_extension: str, normalised_extension: str) -> None:
@@ -152,4 +165,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-2500
