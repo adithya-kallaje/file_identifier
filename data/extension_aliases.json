@@ -31,7 +31,6 @@
     { "aliases": ["md", "py", "rb", "js", "java", "go", "rs", "cs", "sh", "bat", "css", "pl", "pl", "sql", "swift", "vb", "xyz", "h", "htaccess", "c"], "canonical": "txt" },
     { "aliases": ["text"], "canonical": "txt" },
     { "aliases": ["cff"], "canonical": "ps" },
-    { "aliases": ["xls", "ppt"], "canonical": "doc" },
 
 
     { "__comment": "code" },

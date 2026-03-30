@@ -5,6 +5,7 @@ import text_parser
 from re import match
 from zipfile import ZipFile
 from zipfile import BadZipFile
+import olefile
 
 
 MIMETYPE_MAP = {                                                                                                                                                           
@@ -15,11 +16,17 @@ MIMETYPE_MAP = {
     'application/vnd.oasis.opendocument.spreadsheet': "ods",                                                                                                                                                    
 }
 
+OLE_FILE_MAP = {
+    'Workbook': "xls",
+    'PowerPoint Document': "ppt",
+    'WordDocument': "doc" 
+}
+
 
 def get_signature_list() -> bytes:
     # Open and return the file signature json
     try:
-        with open('file_signatures.json', 'r') as signature_file:
+        with open('data/file_signatures.json', 'r') as signature_file:
             return json.load(signature_file)
     except FileNotFoundError:
         print("Signatures file not found")
@@ -32,7 +39,7 @@ def get_signature_list() -> bytes:
 def normalise_extension(extension: str) -> str:
     # Open aliases file
     try:
-        with open('extension_aliases.json', 'r') as aliases_file:
+        with open('data/extension_aliases.json', 'r') as aliases_file:
             aliases_list = json.load(aliases_file)
     except FileNotFoundError:
         print("Error: Aliases file not found")
@@ -70,6 +77,9 @@ def identify_file_type(header_bytes: bytes, normalised_ext: str, file_path: str)
     if detected_ext == "zip":
         detected_ext = inspect_zip_container(file_path)
         
+    if detected_ext == "doc":
+        detected_ext = inspect_ole_container(file_path)
+        
     if detected_ext == None or detected_ext != normalised_ext:        
         # Read the input file
         with open(file_path, 'rb') as f:
@@ -102,6 +112,20 @@ def inspect_zip_container(file_path: str) -> str | None:
     except BadZipFile:
         print("Zipfile corrupted")
         return None
+
+
+def inspect_ole_container(file_path:str) -> str | None:
+    try:
+        ole = olefile.OleFileIO(file_path)
+        for entry in ole.listdir():
+            for inner_entry in entry:
+                if inner_entry in OLE_FILE_MAP: return OLE_FILE_MAP.get(inner_entry)
+
+        return "doc"
+    
+    except olefile.olefile.NotOleFileError:
+        print("Error opening OLE file") 
+        return None   
 
 
 def output(detected_extension: str, declared_extension: str, normalised_extension: str) -> None:
