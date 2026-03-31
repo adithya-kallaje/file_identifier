@@ -1,0 +1,12 @@
+{
+    "DOS batch file": "bat",
+    "MacBinary": "bin",
+    "C source": "c",
+    "Java source": ["class", "java"],
+    "C++ source": ["cpp", "h"],
+    "Mac OSX datafork font": "dfont",
+    "JavaScript source": "js",
+    "Perl script text": "pl",
+    "Ruby script": "rb",
+    "Bourne-Again shell script": "sh"
+}

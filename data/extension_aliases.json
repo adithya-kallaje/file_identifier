@@ -5,7 +5,7 @@
     { "aliases": ["dib"], "canonical": "bmp" },
     { "aliases": ["j2k", "j2c", "jpc", "jpx", "jpf"], "canonical": "jp2" },
     { "aliases": ["pnm"], "canonical": "ppm" },
-    { "aliases": ["cur", "dfont"], "canonical": "ico" },
+    { "aliases": ["cur"], "canonical": "ico" },
     { "aliases": ["picon"], "canonical": "xpm" },
 
 
@@ -28,13 +28,12 @@
 
     
     { "__comment": "document" },
-    { "aliases": ["md", "py", "rb", "js", "java", "go", "rs", "cs", "sh", "bat", "css", "pl", "pl", "sql", "swift", "vb", "xyz", "h", "htaccess", "c"], "canonical": "txt" },
+    { "aliases": ["md", "py", "go", "rs", "cs", "css", "sql", "swift", "vb", "xyz", "htaccess"], "canonical": "txt" },
     { "aliases": ["text"], "canonical": "txt" },
     { "aliases": ["cff"], "canonical": "ps" },
 
 
     { "__comment": "code" },
-    { "aliases": ["cpp"], "canonical": "c" },
     { "aliases": ["htm"], "canonical": "html" },
     { "aliases": ["m3u8"], "canonical": "m3u" },
 

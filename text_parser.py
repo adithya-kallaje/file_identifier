@@ -169,7 +169,10 @@ def check_markdown(data:str) -> str | None:
 """
         
 
-def text_based_format_detection(data:bytes, current_extension: str) -> str | None:
+def text_based_format_detection(file_path:str, current_extension: str) -> str | None:
+    
+    with open(file_path, 'rb') as f:
+            data = f.read()
     
     decoded_data = check_readability(data)
     if decoded_data == None: return current_extension

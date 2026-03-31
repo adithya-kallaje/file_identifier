@@ -6,6 +6,7 @@ from re import match
 from zipfile import ZipFile
 from zipfile import BadZipFile
 import olefile
+import magic
 
 
 MIMETYPE_MAP = {                                                                                                                                                           
@@ -79,14 +80,13 @@ def identify_file_type(header_bytes: bytes, normalised_ext: str, file_path: str)
         
     if detected_ext == "doc":
         detected_ext = inspect_ole_container(file_path)
+    
+    if detected_ext == None or detected_ext != normalised_ext:
+        detected_ext = use_magic_lib(file_path, normalised_ext)
         
-    if detected_ext == None or detected_ext != normalised_ext:        
-        # Read the input file
-        with open(file_path, 'rb') as f:
-            text_content = f.read()
-            
+    if detected_ext == None:        
         # Check for text_parsing if original detection resulted in failure or mismatch
-        return text_parser.text_based_format_detection(text_content, detected_ext)
+        detected_ext =  text_parser.text_based_format_detection(file_path, detected_ext)    
     
     return detected_ext
 
@@ -128,6 +128,27 @@ def inspect_ole_container(file_path:str) -> str | None:
         return None   
 
 
+def use_magic_lib(file_path:str, given_file_ext:str) -> str | dict | None:
+    try:
+        with open('data/magic_values.json', 'r') as file:
+            magic_values = json.load(file)
+            
+        file_magic_value = magic.from_file(file_path, mime=False)
+            
+        for value in magic_values:
+            if match(value, file_magic_value):
+                actual_magic_value = magic_values[value]
+                
+                if given_file_ext in actual_magic_value:return given_file_ext
+                
+                elif isinstance(actual_magic_value, list):
+                    return ' / '.join(actual_magic_value)
+                
+                else: return actual_magic_value
+    except:
+        return        
+
+
 def output(detected_extension: str, declared_extension: str, normalised_extension: str) -> None:
     if detected_extension is not None:
         if declared_extension == '':
@@ -160,7 +181,7 @@ def main():
 
     # Get the extension from the file
     file_path = sys.argv[1]
-    # file_path = "test_files/frieren"
+    # file_path = "test_files/sample.cpp"
 
     # Extract the file extension from the filename
     declared_extension = Path(file_path).suffix[1:].lower()  
