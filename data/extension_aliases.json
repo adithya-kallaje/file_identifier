@@ -28,7 +28,7 @@
 
     
     { "__comment": "document" },
-    { "aliases": ["md", "py", "go", "rs", "cs", "css", "sql", "swift", "vb", "xyz", "htaccess"], "canonical": "txt" },
+    { "aliases": ["md", "py", "rs", "cs", "css", "sql", "swift", "vb", "xyz", "htaccess"], "canonical": "txt" },
     { "aliases": ["text"], "canonical": "txt" },
     { "aliases": ["cff"], "canonical": "ps" },
 

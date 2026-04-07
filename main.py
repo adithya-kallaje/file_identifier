@@ -2,7 +2,7 @@ import sys
 import json
 from pathlib import Path
 import text_parser    
-from re import match
+import re
 from zipfile import ZipFile
 from zipfile import BadZipFile
 import olefile
@@ -22,6 +22,8 @@ OLE_FILE_MAP = {
     'PowerPoint Document': "ppt",
     'WordDocument': "doc" 
 }
+
+TWO_STEP_EXTENSIONS = ['bin']
 
 
 def get_signature_list() -> bytes:
@@ -71,22 +73,22 @@ def identify_file_type(header_bytes: bytes, normalised_ext: str, file_path: str)
             header_offset = signatures["offset"] * 2
             matching_signatures = '.' * header_offset + signatures["signature"]
             
-            if match(matching_signatures, header_bytes.hex()) and len(matching_signatures) > detected_ext_length:
+            if re.match(matching_signatures, header_bytes.hex()) and len(matching_signatures) > detected_ext_length:
                 detected_ext = files_types
                 detected_ext_length = len(matching_signatures)
                 
     if detected_ext == "zip":
         detected_ext = inspect_zip_container(file_path)
-        
+               
     if detected_ext == "doc":
         detected_ext = inspect_ole_container(file_path)
-    
+           
     if detected_ext == None or detected_ext != normalised_ext:
-        detected_ext = use_magic_lib(file_path, normalised_ext)
+        detected_ext = use_magic_lib(file_path, normalised_ext, detected_ext)
         
-    if detected_ext == None:        
+    if detected_ext == None or detected_ext != normalised_ext:        
         # Check for text_parsing if original detection resulted in failure or mismatch
-        detected_ext =  text_parser.text_based_format_detection(file_path, detected_ext)    
+        detected_ext =  text_parser.text_based_format_detection(file_path, detected_ext)  
     
     return detected_ext
 
@@ -128,7 +130,7 @@ def inspect_ole_container(file_path:str) -> str | None:
         return None   
 
 
-def use_magic_lib(file_path:str, given_file_ext:str) -> str | dict | None:
+def use_magic_lib(file_path:str, given_file_ext:str, detected_file_ext:str) -> str | None:
     try:
         with open('data/magic_values.json', 'r') as file:
             magic_values = json.load(file)
@@ -136,7 +138,9 @@ def use_magic_lib(file_path:str, given_file_ext:str) -> str | dict | None:
         file_magic_value = magic.from_file(file_path, mime=False)
             
         for value in magic_values:
-            if match(value, file_magic_value):
+            
+            if re.match(re.escape(value), file_magic_value):
+                
                 actual_magic_value = magic_values[value]
                 
                 if given_file_ext in actual_magic_value:return given_file_ext
@@ -145,9 +149,19 @@ def use_magic_lib(file_path:str, given_file_ext:str) -> str | dict | None:
                     return ' / '.join(actual_magic_value)
                 
                 else: return actual_magic_value
-    except:
-        return        
-
+        
+        return detected_file_ext
+    
+    except FileNotFoundError:
+        print("Error: magic_values.json file not found.")
+        return None
+    except PermissionError:
+        print("Error: magic_values.json permission denied.")
+        return None
+    except re.error as e:
+        print(f"Error on matching file signature: {e}")
+        return None
+    
 
 def output(detected_extension: str, declared_extension: str, normalised_extension: str) -> None:
     if detected_extension is not None:

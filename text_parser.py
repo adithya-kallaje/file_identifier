@@ -94,7 +94,6 @@ def check_xml(data:str) -> str | None:
             elif 'svg' in ns_uri.lower():
                 return 'svg'
             else:
-                print("Returned nothing")
                 return 'xml'
         else:
             tag_name = root.tag.lower()
@@ -192,7 +191,8 @@ def text_based_format_detection(file_path:str, current_extension: str) -> str | 
     is_yaml = check_yaml(decoded_data)
     if is_yaml is not None: return is_yaml
     
-    return 'txt'
+    if current_extension == None: return "txt"
+    return current_extension
                     
 """ 
 filepath = sys.argv[1]
