@@ -1,7 +1,8 @@
-import sys
 import json
+import glob
+import readline
 from pathlib import Path
-import text_parser    
+import text_parser
 import re
 from zipfile import ZipFile
 from zipfile import BadZipFile
@@ -23,10 +24,8 @@ OLE_FILE_MAP = {
     'WordDocument': "doc" 
 }
 
-TWO_STEP_EXTENSIONS = ['bin']
 
-
-def get_signature_list() -> bytes:
+def get_signature_list() -> dict | None:
     # Open and return the file signature json
     try:
         with open('data/file_signatures.json', 'r') as signature_file:
@@ -80,7 +79,7 @@ def identify_file_type(header_bytes: bytes, normalised_ext: str, file_path: str)
     if detected_ext == "zip":
         detected_ext = inspect_zip_container(file_path)
                
-    if detected_ext == "doc":
+    elif detected_ext == "doc":
         detected_ext = inspect_ole_container(file_path)
            
     if detected_ext == None or detected_ext != normalised_ext:
@@ -122,7 +121,8 @@ def inspect_ole_container(file_path:str) -> str | None:
         for entry in ole.listdir():
             for inner_entry in entry:
                 if inner_entry in OLE_FILE_MAP: return OLE_FILE_MAP.get(inner_entry)
-
+                
+        ole.close()
         return "doc"
     
     except olefile.olefile.NotOleFileError:
@@ -139,8 +139,7 @@ def use_magic_lib(file_path:str, given_file_ext:str, detected_file_ext:str) -> s
             
         for value in magic_values:
             
-            if re.match(re.escape(value), file_magic_value):
-                
+            if file_magic_value.startswith(value):
                 actual_magic_value = magic_values[value]
                 
                 if given_file_ext in actual_magic_value:return given_file_ext
@@ -163,63 +162,84 @@ def use_magic_lib(file_path:str, given_file_ext:str, detected_file_ext:str) -> s
         return None
     
 
+DIVIDER = "-" * 40
+
+
 def output(detected_extension: str, declared_extension: str, normalised_extension: str) -> None:
-    if detected_extension is not None:
-        if declared_extension == '':
-            print(f"Detected {detected_extension} from header values \nFile has no extension, potential file upload vulnerability")
-            return
-        
-        if declared_extension != normalised_extension:
-            print(f"Given file type  : {declared_extension} -> {normalised_extension}")
-        else:
-            print(f"Given file type  : {declared_extension}")
-            
-        print(f"Actual file type : {detected_extension}")
-        
-        if detected_extension == normalised_extension:
-            print("\nExtensions match.")
-            return
-        else:
-            print("\nMismatching file extensions. Potential file upload vulnerability.")
-            return
-    else:
+    print(DIVIDER)
+
+    if detected_extension is None:
         print("Unable to detect file type")
+        print(DIVIDER)
         return
-    
+
+    if declared_extension == '':
+        print(f"Detected       : {detected_extension}")
+        print("Warning        : No file extension — potential file upload vulnerability")
+        print(DIVIDER)
+        return
+
+    if declared_extension != normalised_extension:
+        print(f"Given type     : {declared_extension} -> {normalised_extension}")
+    else:
+        print(f"Given type     : {declared_extension}")
+
+    print(f"Detected type  : {detected_extension}")
+    print()
+
+    if detected_extension == normalised_extension:
+        print("Result         : Extensions match.")
+    else:
+        print("Result         : MISMATCH — potential file upload vulnerability.")
+
+    print(DIVIDER)
+
+
+def path_completer(text, state):
+    matches = glob.glob(text + '*')
+    matches = [m + '/' if Path(m).is_dir() else m for m in matches]
+    return matches[state] if state < len(matches) else None
+
 
 def main():
-    # Ensure a file path was provided
-    if len(sys.argv) < 2:
-        print("Usage: python main.py <file_path>")
-        return
+    readline.set_completer(path_completer)
+    readline.set_completer_delims(' \t\n')
+    readline.parse_and_bind("tab: complete")
 
-    # Get the extension from the file
-    file_path = sys.argv[1]
-    # file_path = "test_files/sample.cpp"
+    print("File Identifier")
+    print(DIVIDER)
 
-    # Extract the file extension from the filename
-    declared_extension = Path(file_path).suffix[1:].lower()  
- 
-    # Open the input file and read the header bytes
-    try:
-        with open(file_path, 'rb') as f:
-            header_bytes = f.read(2500)
-    except FileNotFoundError:
-        print("Error: File not found.")
-        return 
-    except PermissionError:
-        print("Error: Permission denied.")
-        return 
-    
-    # Check for aliases
-    normalised_extension = normalise_extension(declared_extension)
-    if normalised_extension is None: return None
-    
-    # Identify the actual file type using file signatures and text_parsing
-    detected_extension = identify_file_type(header_bytes, normalised_extension, file_path)
+    while True:
+        try:
+            file_path = input("\nEnter file path: ").strip()
+        except KeyboardInterrupt:
+            print("\nExiting.")
+            return
 
-    # Compare the declared extension with the detected file type
-    output(detected_extension, declared_extension, normalised_extension)
+        # Extract the declared extension from the filename
+        declared_extension = Path(file_path).suffix[1:].lower()
+
+        # Read the header bytes
+        try:
+            with open(file_path, 'rb') as f:
+                header_bytes = f.read(2500)
+        except FileNotFoundError:
+            print("Error: File not found.")
+            continue
+        except PermissionError:
+            print("Error: Permission denied.")
+            continue
+
+        # Resolve any extension aliases
+        normalised_extension = normalise_extension(declared_extension)
+        if normalised_extension is None:
+            continue
+
+        # Identify the actual file type
+        detected_extension = identify_file_type(header_bytes, normalised_extension, file_path)
+
+        # Report the result
+        output(detected_extension, declared_extension, normalised_extension)
         
 
 if __name__ == '__main__':

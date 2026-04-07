@@ -69,7 +69,7 @@ def check_html(data:str) -> str | None:
 
         parser = MyHTMLParser()
         parser.feed(data)
-        if parser.found_html: return 'HTML'
+        if parser.found_html: return 'html'
     except:
         return None
     
@@ -113,60 +113,11 @@ def check_yaml(data:str) -> str | None:
         yaml_data = yaml.safe_load(data)
         # print(type(yaml_data))
         if isinstance(yaml_data, dict):
-            return 'YAML'
+            return 'yaml'
         else: return None
     except yaml.YAMLError:
         return None
-    
-    
-"""     
-def check_markdown(data:str) -> str | None:
-    '''Check for Markdown'''
-    try:
-        indicators = set()
-        lines = data.split('\n')
-        
-        # Check for common Markdown patterns
-        for line in lines:
-            stripped = line.strip()
-            
-            # Headings with # symbols
-            if stripped.startswith('#') and stripped.startswith('#' * len(stripped.split()[0])):
-                indicators.add(1)
-            
-            # Unordered lists with -, *, or +
-            elif stripped.startswith(('- ', '* ', '+ ')):
-                indicators.add(5)
-            
-            else:
-                # Bold or italic markers
-                if '**' in stripped or '__' in stripped or '*' in stripped:
-                    indicators.add(2)
-                
-                # Links [text](url)
-                if '[' in stripped and ']' in stripped and '(' in stripped:
-                    indicators.add(3)
-                
-                # Code blocks with backticks
-                if '```' in stripped or stripped.startswith('    '):
-                    indicators.add(4)
-                
-                # Ordered lists with numbers
-                if stripped and stripped[0].isdigit() and stripped[1:].startswith('. '):
-                    indicators.add(6)
-                
-            if len(indicators) >= 2: break
-                
-        # print(f"Indicators for Markdown = {indicators}")
-        
-        if len(indicators) >= 2:
-            return 'md'
-        else:
-            return None
-    except Exception as e:
-        return None 
-"""
-        
+
 
 def text_based_format_detection(file_path:str, current_extension: str) -> str | None:
     
