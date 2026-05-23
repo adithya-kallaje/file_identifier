@@ -38,11 +38,11 @@ def get_signature_list() -> dict | None:
         return None
 
 
-def normalise_extension(extension: str) -> str:
+def get_alias_list() -> dict | None:
     # Open aliases file
     try:
         with open('data/extension_aliases.json', 'r') as aliases_file:
-            aliases_list = json.load(aliases_file)
+            return json.load(aliases_file)
     except FileNotFoundError:
         print("Error: Aliases file not found")
         return None
@@ -50,44 +50,43 @@ def normalise_extension(extension: str) -> str:
         print("Error: Aliases file corrupted")
         return None
     
-    # Search through the alias file 
+    
+def get_magic_values_list() -> dict | None:
+    # Open magic values file
+    try:
+        with open('data/magic_values.json', 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print("Error: magic_values.json file not found.")
+        return None
+    except PermissionError:
+        print("Error: magic_values.json permission denied.")
+        return None
+
+
+def normalise_extension(extension: str, aliases_list: dict) -> str:    
     for extensions in aliases_list:
         if 'aliases' in extensions and extension in extensions['aliases']:
             return extensions['canonical']
     return extension
 
 
-def identify_file_type(header_bytes: bytes, normalised_ext: str, file_path: str) -> str | None:
-    signatures_list = get_signature_list()
-    if signatures_list is None: return
-    
+def inspect_magic_bytes(header_bytes: bytes, signatures_list: dict) -> str | None:
     detected_ext = None
     detected_ext_length = 0
     
     # Iterate through all file types
-    for files_types in signatures_list:
-        if files_types.startswith('__'): continue
+    for file_type in signatures_list:
+        if file_type.startswith('__'): continue
         
-        for signatures in signatures_list[files_types]:
-            header_offset = signatures["offset"] * 2
-            matching_signatures = '.' * header_offset + signatures["signature"]
+        for signature in signatures_list[file_type]:
+            header_offset = signature["offset"] * 2
+            matching_signatures = '.' * header_offset + signature["signature"]
             
             if re.match(matching_signatures, header_bytes.hex()) and len(matching_signatures) > detected_ext_length:
-                detected_ext = files_types
+                detected_ext = file_type
                 detected_ext_length = len(matching_signatures)
-                
-    if detected_ext == "zip":
-        detected_ext = inspect_zip_container(file_path)
-               
-    elif detected_ext == "doc":
-        detected_ext = inspect_ole_container(file_path)
-           
-    if detected_ext == None or detected_ext != normalised_ext:
-        detected_ext = use_magic_lib(file_path, normalised_ext, detected_ext)
-        
-    if detected_ext == None or detected_ext != normalised_ext:        
-        # Check for text_parsing if original detection resulted in failure or mismatch
-        detected_ext =  text_parser.text_based_format_detection(file_path, detected_ext)  
+
     
     return detected_ext
 
@@ -116,50 +115,37 @@ def inspect_zip_container(file_path: str) -> str | None:
 
 
 def inspect_ole_container(file_path:str) -> str | None:
+    ole = None
     try:
         ole = olefile.OleFileIO(file_path)
         for entry in ole.listdir():
             for inner_entry in entry:
                 if inner_entry in OLE_FILE_MAP: return OLE_FILE_MAP.get(inner_entry)
-                
-        ole.close()
         return "doc"
-    
+
     except olefile.olefile.NotOleFileError:
         print("Error opening OLE file") 
         return None   
-
-
-def use_magic_lib(file_path:str, given_file_ext:str, detected_file_ext:str) -> str | None:
-    try:
-        with open('data/magic_values.json', 'r') as file:
-            magic_values = json.load(file)
-            
-        file_magic_value = magic.from_file(file_path, mime=False)
-            
-        for value in magic_values:
-            
-            if file_magic_value.startswith(value):
-                actual_magic_value = magic_values[value]
-                
-                if given_file_ext in actual_magic_value:return given_file_ext
-                
-                elif isinstance(actual_magic_value, list):
-                    return ' / '.join(actual_magic_value)
-                
-                else: return actual_magic_value
-        
-        return detected_file_ext
     
-    except FileNotFoundError:
-        print("Error: magic_values.json file not found.")
-        return None
-    except PermissionError:
-        print("Error: magic_values.json permission denied.")
-        return None
-    except re.error as e:
-        print(f"Error on matching file signature: {e}")
-        return None
+    finally:
+        if ole: ole.close()
+
+
+def use_magic_lib(file_path:str, given_file_ext:str, detected_file_ext:str, magic_values: dict) -> str | None:        
+    file_magic_value = magic.from_file(file_path, mime=False)
+        
+    for value in magic_values:
+        if file_magic_value.startswith(value):
+            actual_magic_value = magic_values[value]
+            
+            if given_file_ext in actual_magic_value:return given_file_ext
+            
+            elif isinstance(actual_magic_value, list):
+                return ' / '.join(actual_magic_value)
+            
+            else: return actual_magic_value
+    
+    return detected_file_ext
     
 
 DIVIDER = "-" * 40
@@ -208,12 +194,18 @@ def main():
 
     print("File Identifier")
     print(DIVIDER)
+    
+    signature_list = get_signature_list()
+    alias_list = get_alias_list()
+    magic_values = get_magic_values_list()
+    
+    if signature_list is None or alias_list is None or magic_values is None: return
 
     while True:
         try:
             file_path = input("\nEnter file path: ").strip()
         except KeyboardInterrupt:
-            print("\nExiting.")
+            print("\n\nExiting...\n")
             return
 
         # Extract the declared extension from the filename
@@ -231,12 +223,28 @@ def main():
             continue
 
         # Resolve any extension aliases
-        normalised_extension = normalise_extension(declared_extension)
-        if normalised_extension is None:
-            continue
+        normalised_extension = normalise_extension(declared_extension, alias_list)
 
-        # Identify the actual file type
-        detected_extension = identify_file_type(header_bytes, normalised_extension, file_path)
+        ## File detection
+        
+        # Check magic bytes
+        detected_extension = inspect_magic_bytes(header_bytes, signature_list)
+        
+        # Check zip container
+        if detected_extension == "zip":
+                detected_extension = inspect_zip_container(file_path)
+        
+        # Check ole container
+        elif detected_extension == "doc":
+            detected_extension = inspect_ole_container(file_path)
+        
+        # Utilize "file" magic library
+        if detected_extension == None or detected_extension != normalised_extension:
+            detected_extension = use_magic_lib(file_path, normalised_extension, detected_extension, magic_values)
+        
+        # Check text content
+        if detected_extension == None or detected_extension != normalised_extension: 
+            detected_extension =  text_parser.text_based_format_detection(file_path, detected_extension, header_bytes)  
 
         # Report the result
         output(detected_extension, declared_extension, normalised_extension)

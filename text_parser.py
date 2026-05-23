@@ -1,9 +1,7 @@
-import sys
 import json
 import csv
 from html.parser import HTMLParser
 import xml.etree.ElementTree as ET
-import yaml
 
 
 def check_readability(data:bytes) -> str | None:
@@ -64,13 +62,14 @@ def check_html(data:str) -> str | None:
                 self.found_html = False
 
             def handle_starttag(self, tag, attrs):
-                if tag.endswith('html'):
+                if tag == 'html':
                     self.found_html = True
 
         parser = MyHTMLParser()
         parser.feed(data)
         if parser.found_html: return 'html'
-    except:
+        return None
+    except Exception:
         return None
     
     
@@ -107,22 +106,12 @@ def check_xml(data:str) -> str | None:
         return None
 
 
-def check_yaml(data:str) -> str | None:
-    '''Check for YAML'''
-    try:
-        yaml_data = yaml.safe_load(data)
-        # print(type(yaml_data))
-        if isinstance(yaml_data, dict):
-            return 'yaml'
-        else: return None
-    except yaml.YAMLError:
-        return None
-
-
-def text_based_format_detection(file_path:str, current_extension: str) -> str | None:
+def text_based_format_detection(file_path:str, current_extension: str, header_bytes: bytes) -> str | None:
     
     with open(file_path, 'rb') as f:
-            data = f.read()
+        f.seek(len(header_bytes))
+        rest = f.read()
+        data = header_bytes + rest
     
     decoded_data = check_readability(data)
     if decoded_data == None: return current_extension
@@ -139,19 +128,5 @@ def text_based_format_detection(file_path:str, current_extension: str) -> str | 
     is_xml = check_xml(decoded_data)
     if is_xml is not None: return is_xml
     
-    is_yaml = check_yaml(decoded_data)
-    if is_yaml is not None: return is_yaml
-    
     if current_extension == None: return "txt"
     return current_extension
-                    
-""" 
-filepath = sys.argv[1]
-# filepath = 'test_files/sample.md'
-with open(filepath, 'rb') as f:
-    data = f.read()
-    file_type = text_based_format_detection(data)   
-    
-    if file_type is None: print("Dumb fucking file detected")
-    else: print(f"Detected file type: {file_type}") 
-"""
