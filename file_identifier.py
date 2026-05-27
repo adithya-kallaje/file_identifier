@@ -44,11 +44,11 @@ class Datasets():
     
 
 @dataclass
-class User_input():
+class UserInput():
     '''Holds information about the user input'''
     file_path: str
     input_type: str
-    write_output: str
+    write_output: str | None
     
 
 def get_signature_list() -> dict | None:
@@ -217,6 +217,7 @@ def file_output(file_extensions: Extensions) -> None:
     
 
 def dir_output(file_extension: Extensions, file_path: str, title: bool) -> None:
+    '''Print detection result for directories'''
     
     actual_extension = file_extension.actual_extension
     normalized_extension = file_extension.normalized_extension
@@ -232,9 +233,9 @@ def dir_output(file_extension: Extensions, file_path: str, title: bool) -> None:
     actual_str = actual_extension if actual_extension is not None else "UNKNOWN"
     
     if actual_str == 'UNKNOWN': verdict = 'Could Not Identify File extension'
-    elif actual_str == claimed_extension: verdict = 'Extensions match'
     elif claimed_extension == '': verdict = 'No file extension - potential file upload vulnerability'
-    elif claimed_extension != actual_extension: verdict = 'MISMATCH — potential file upload vulnerability'
+    elif actual_str == normalized_extension: verdict = 'Extensions match'
+    else: verdict = 'MISMATCH — potential file upload vulnerability'
     
     claimed_str = f"{claimed_extension} -> {normalized_extension}" if claimed_extension != normalized_extension else claimed_extension
     print(f"{str(file_path):<50} {claimed_str:<25} {actual_str:<25} {verdict}")   
@@ -291,7 +292,7 @@ def identify_file_type(file_path: str, dataset: Datasets) -> Extensions:
     return file_extensions
     
     
-def dispatch_identification(input: User_input, dataset:Datasets):
+def dispatch_identification(input: UserInput, dataset:Datasets):
     '''Calls the identification and output functions depending on the user input (dir/file)'''
     
     input_type = input.input_type
@@ -331,7 +332,7 @@ def get_input():
 
     args = parser.parse_args()
     
-    input = User_input(
+    input = UserInput(
         file_path= args.file if args.file else args.directory,
         input_type= 'file' if args.file else 'directory',
         write_output= args.output_file
@@ -343,7 +344,6 @@ def get_input():
 def main():
     '''Entry point: loads data files once, then dispatches to single-file or batch mode.'''
     input = get_input()
-    path = input.file_path
     
     # Get the datasets and put them in a dataclass
     signature_list = get_signature_list()
