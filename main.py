@@ -7,6 +7,7 @@ from zipfile import BadZipFile
 import olefile
 import magic
 import argparse
+from dataclasses import dataclass
 
 
 MIMETYPE_MAP = {                                                                                                                                                           
@@ -25,6 +26,30 @@ OLE_FILE_MAP = {
 
 DIVIDER = "-" * 40
 
+
+@dataclass
+class Extensions():
+    '''A class to hold all extension informations for the file'''
+    actual_extension: str
+    claimed_extension: str
+    normalized_extension: str
+    
+
+@dataclass
+class Datasets():
+    '''Holds the various dataset the program refers to'''
+    signature_list: dict
+    alias_list: dict
+    magic_values: dict
+    
+
+@dataclass
+class User_input():
+    '''Holds information about the user input'''
+    file_path: str
+    input_type: str
+    write_output: str
+    
 
 def get_signature_list() -> dict | None:
     '''Load magic byte signatures from data/file_signatures.json.'''
@@ -65,7 +90,7 @@ def get_magic_values_list() -> dict | None:
         return None
 
 
-def normalise_extension(extension: str, aliases_list: dict) -> str:
+def normalize_extension(extension: str, aliases_list: dict) -> str:
     '''Resolve an extension to its canonical form (e.g. jpg → jpeg, dng → tiff).'''
     for extensions in aliases_list:
         if 'aliases' in extensions and extension in extensions['aliases']:
@@ -154,41 +179,68 @@ def use_magic_lib(file_path:str, claimed_ext:str, actual_ext:str, magic_values: 
     return actual_ext
 
 
-def output(actual_extension: str, claimed_extension: str, normalised_extension: str, input_type: str, file_path: str) -> None:
-    '''Print detection result — verbose for single-file mode, compact row for directory mode.'''
-    if input_type == 'file':
-        if actual_extension is None:
-            print("Unable to detect file type")
-            print(DIVIDER)
-            return
-
-        if claimed_extension == '':
-            print(f"Detected       : {actual_extension}")
-            print("Warning        : No file extension — potential file upload vulnerability")
-            print(DIVIDER)
-            return
-
-        if claimed_extension != normalised_extension:
-            print(f"Given type     : {claimed_extension} -> {normalised_extension}")
-        else:
-            print(f"Given type     : {claimed_extension}")
-
-        print(f"Detected type  : {actual_extension}\n")
-
-        if actual_extension == normalised_extension:
-            print("Result         : Extensions match.")
-        else:
-            print("Result         : MISMATCH — potential file upload vulnerability.")
-
+def file_output(file_extensions: Extensions) -> None:
+    '''Print detection result for files'''
+    
+    actual_extension = file_extensions.actual_extension
+    claimed_extension = file_extensions.claimed_extension
+    normalized_extension = file_extensions.normalized_extension
+    
+    print(f"\n{DIVIDER}")
+    print("File Identifier")
+    print(DIVIDER)
+    
+    if actual_extension is None:
+        print("Unable to detect file type")
         print(DIVIDER)
-        
+        return
+
+    if claimed_extension == '':
+        print(f"Detected       : {actual_extension}")
+        print("Warning        : No file extension - potential file upload vulnerability")
+        print(DIVIDER)
+        return
+
+    if claimed_extension != normalized_extension:
+        print(f"Given type     : {claimed_extension} -> {normalized_extension}")
     else:
-        actual_str = actual_extension if actual_extension is not None else "UNKNOWN"
-        verdict = "MISMATCH" if normalised_extension != actual_extension else "MATCH"
-        print(f"{str(file_path):<50} {claimed_extension:<15} {actual_str:<15} {verdict}")
+        print(f"Given type     : {claimed_extension}")
+
+    print(f"Detected type  : {actual_extension}\n")
+
+    if actual_extension == normalized_extension:
+        print("Result         : Extensions match.")
+    else:
+        print("Result         : MISMATCH — potential file upload vulnerability.")
+
+    print(DIVIDER)
+    
+
+def dir_output(file_extension: Extensions, file_path: str, title: bool) -> None:
+    
+    actual_extension = file_extension.actual_extension
+    normalized_extension = file_extension.normalized_extension
+    claimed_extension = file_extension.claimed_extension
+    
+    if title:
+        print(f"\n{DIVIDER * 4}")
+        print("File Identifier")
+        print()
+        print(f"{'FILE PATH':<50} {'CLAIMED EXT':<25} {'ACTUAL EXT':<25} {'OUTPUT'}")
+        print(DIVIDER * 4)
+    
+    actual_str = actual_extension if actual_extension is not None else "UNKNOWN"
+    
+    if actual_str == 'UNKNOWN': verdict = 'Could Not Identify File extension'
+    elif actual_str == claimed_extension: verdict = 'Extensions match'
+    elif claimed_extension == '': verdict = 'No file extension - potential file upload vulnerability'
+    elif claimed_extension != actual_extension: verdict = 'MISMATCH — potential file upload vulnerability'
+    
+    claimed_str = f"{claimed_extension} -> {normalized_extension}" if claimed_extension != normalized_extension else claimed_extension
+    print(f"{str(file_path):<50} {claimed_str:<25} {actual_str:<25} {verdict}")   
 
 
-def identify_file_type(file_path: str, input_type:str, signature_list: dict, alias_list: dict, magic_values: dict) -> None:
+def identify_file_type(file_path: str, dataset: Datasets) -> Extensions:
     '''Run the full detection pipeline on a single file and report the result.'''
 
     # Extract the declared extension from the filename
@@ -206,12 +258,12 @@ def identify_file_type(file_path: str, input_type:str, signature_list: dict, ali
         return
 
     # Resolve any extension aliases
-    normalised_extension = normalise_extension(claimed_extension, alias_list)
+    normalized_extension = normalize_extension(claimed_extension, dataset.alias_list)
 
     ## File detection
     
     # Check magic bytes
-    actual_extension = inspect_magic_bytes(header_bytes, signature_list)
+    actual_extension = inspect_magic_bytes(header_bytes, dataset.signature_list)
     
     # Check zip container
     if actual_extension == "zip":
@@ -222,19 +274,49 @@ def identify_file_type(file_path: str, input_type:str, signature_list: dict, ali
         actual_extension = inspect_ole_container(file_path)
     
     # Utilize "file" magic library
-    if actual_extension == None or actual_extension != normalised_extension:
-        actual_extension = use_magic_lib(file_path, normalised_extension, actual_extension, magic_values)
+    if actual_extension == None or actual_extension != normalized_extension:
+        actual_extension = use_magic_lib(file_path, normalized_extension, actual_extension, dataset.magic_values)
     
     # Check text content
-    if actual_extension == None or actual_extension != normalised_extension: 
+    if actual_extension == None or actual_extension != normalized_extension: 
         actual_extension =  text_parser.text_based_format_detection(file_path, actual_extension, header_bytes)  
+        
+    # Create extensions dataclass
+    file_extensions = Extensions(
+        actual_extension=actual_extension, 
+        claimed_extension=claimed_extension, 
+        normalized_extension=normalized_extension
+    )
 
-    # Report the result
-    output(actual_extension, claimed_extension, normalised_extension, input_type, file_path)
+    return file_extensions
     
+    
+def dispatch_identification(input: User_input, dataset:Datasets):
+    '''Calls the identification and output functions depending on the user input (dir/file)'''
+    
+    input_type = input.input_type
+    path = input.file_path
+    title = True
+    
+    if input_type == 'file':
+        file_extension = identify_file_type(file_path=path, dataset=dataset)
+        file_output(file_extensions=file_extension)
+        
+    elif input_type == 'directory':
+        for item_path in Path(path).iterdir():
+            file_extension = identify_file_type(file_path=item_path, dataset=dataset)
+            
+            if input.write_output:
+                # Write to the file
+                return
+                
+            else:
+                dir_output(file_extension=file_extension, file_path=item_path, title=title)
+                title = False
+                    
             
 def get_input():
-    '''Parse CLI arguments; returns ['file'|'directory', path].'''
+    '''Parse CLI arguments; returns ['file'|'directory', path, output_path].'''
     parser = argparse.ArgumentParser(
                 prog="A test program",
                 description="A program to test how argparse works",
@@ -244,37 +326,39 @@ def get_input():
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-f', '--file')
     group.add_argument('-d', '--directory')
+    
+    parser.add_argument('-o', '--output_file')
 
     args = parser.parse_args()
     
-    if args.file: return ['file', args.file]
-    return ['directory', args.directory]  
+    input = User_input(
+        file_path= args.file if args.file else args.directory,
+        input_type= 'file' if args.file else 'directory',
+        write_output= args.output_file
+    )
+    
+    return input
 
 
 def main():
     '''Entry point: loads data files once, then dispatches to single-file or batch mode.'''
     input = get_input()
-    path = input[1]
+    path = input.file_path
     
+    # Get the datasets and put them in a dataclass
     signature_list = get_signature_list()
     alias_list = get_alias_list()
     magic_values = get_magic_values_list()
     
     if signature_list is None or alias_list is None or magic_values is None: return
     
-    if input[0] == 'file':
-        print(DIVIDER)
-        print("File Identifier")
-        print(DIVIDER)
-        identify_file_type(file_path=path, input_type='file', signature_list=signature_list, alias_list=alias_list, magic_values=magic_values)
-    else:
-        print(DIVIDER * 2)
-        print("File Identifier")
-        print()
-        print(f"{'FILE PATH':<50} {'CLAIMED EXT':<15} {'ACTUAL EXT':<15} {'OUTPUT'}")
-        print(DIVIDER * 2)
-        for item_path in Path(path).iterdir():
-            identify_file_type(file_path=item_path, input_type='directory', signature_list=signature_list, alias_list=alias_list, magic_values=magic_values)
+    dataset = Datasets(
+        signature_list=signature_list,
+        alias_list=alias_list,
+        magic_values=magic_values
+    )
+    
+    dispatch_identification(input=input, dataset=dataset)
 
 
 if __name__ == '__main__':
