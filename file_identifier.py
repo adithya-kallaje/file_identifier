@@ -26,6 +26,13 @@ OLE_FILE_MAP = {
 
 DIVIDER = "-" * 40
 
+DIR_HEADING = [
+            (f"\n{DIVIDER * 4}"), 
+            ("File Identifier\n"), 
+            (f"{'FILE PATH':<50} {'CLAIMED EXT':<25} {'ACTUAL EXT':<25} {'OUTPUT'}"),
+            (f"{DIVIDER * 4}")
+        ]
+
 
 @dataclass
 class Extensions():
@@ -216,19 +223,12 @@ def file_output(file_extensions: Extensions) -> None:
     print(DIVIDER)
     
 
-def dir_output(file_extension: Extensions, file_path: str, title: bool) -> None:
-    '''Print detection result for directories'''
+def dir_output(file_extension: Extensions, file_path: str) -> str:
+    '''Returns detection result for directories'''
     
     actual_extension = file_extension.actual_extension
     normalized_extension = file_extension.normalized_extension
     claimed_extension = file_extension.claimed_extension
-    
-    if title:
-        print(f"\n{DIVIDER * 4}")
-        print("File Identifier")
-        print()
-        print(f"{'FILE PATH':<50} {'CLAIMED EXT':<25} {'ACTUAL EXT':<25} {'OUTPUT'}")
-        print(DIVIDER * 4)
     
     actual_str = actual_extension if actual_extension is not None else "UNKNOWN"
     
@@ -238,7 +238,7 @@ def dir_output(file_extension: Extensions, file_path: str, title: bool) -> None:
     else: verdict = 'MISMATCH — potential file upload vulnerability'
     
     claimed_str = f"{claimed_extension} -> {normalized_extension}" if claimed_extension != normalized_extension else claimed_extension
-    print(f"{str(file_path):<50} {claimed_str:<25} {actual_str:<25} {verdict}")   
+    return (f"{str(file_path):<50} {claimed_str:<25} {actual_str:<25} {verdict}") 
 
 
 def identify_file_type(file_path: str, dataset: Datasets) -> Extensions:
@@ -292,36 +292,43 @@ def identify_file_type(file_path: str, dataset: Datasets) -> Extensions:
     return file_extensions
     
     
-def dispatch_identification(input: UserInput, dataset:Datasets):
+def dispatch_identification(input: UserInput, dataset:Datasets) -> None:
     '''Calls the identification and output functions depending on the user input (dir/file)'''
     
     input_type = input.input_type
     path = input.file_path
-    title = True
     
     if input_type == 'file':
         file_extension = identify_file_type(file_path=path, dataset=dataset)
+        if file_extension == None: return
+        
         file_output(file_extensions=file_extension)
         
     elif input_type == 'directory':
+        
+        file_verdicts = []  
+        file_verdicts.extend(DIR_HEADING)
+        
         for item_path in Path(path).iterdir():
             file_extension = identify_file_type(file_path=item_path, dataset=dataset)
+            file_verdicts.append(dir_output(file_extension=file_extension, file_path=item_path))
             
-            if input.write_output:
-                # Write to the file
-                return
-                
-            else:
-                dir_output(file_extension=file_extension, file_path=item_path, title=title)
-                title = False
+        if input.write_output:
+            try:
+                with open(file=input.write_output, mode="w") as output_file: 
+                    output_file.writelines(s + "\n" for s in file_verdicts) 
+            except OSError as e:
+                print(f"Error writing to {input.write_output}: {e}")
+            
+        else:
+            for i in file_verdicts: print(i)
                     
             
-def get_input():
-    '''Parse CLI arguments; returns ['file'|'directory', path, output_path].'''
+def get_input() -> UserInput:
+    '''Parse CLI arguments'''
     parser = argparse.ArgumentParser(
-                prog="A test program",
-                description="A program to test how argparse works",
-                epilog="This is the epilogue field"
+                prog="File identifier",
+                description="A program to check if the filename extension matches the actual file extension"
     )
 
     group = parser.add_mutually_exclusive_group(required=True)
