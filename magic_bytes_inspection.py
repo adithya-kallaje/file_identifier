@@ -1,7 +1,6 @@
 import re
 
-MULTI_CONDITION_FILETYPES = ['wav', 'avi', 'webp']
- 
+
 def inspect_magic_bytes(header_bytes: bytes, signatures_list: dict) -> str | None:
     '''Match file header bytes against known signatures; returns longest/most-specific match.'''
     detected_ext = None
@@ -13,8 +12,9 @@ def inspect_magic_bytes(header_bytes: bytes, signatures_list: dict) -> str | Non
         # Ignore json comments
         if file_type.startswith('__'): continue
         
-        # Check if the file has multiple conditions
-        elif file_type in MULTI_CONDITION_FILETYPES: 
+        # A multi-condition entry is a list of variations (list-of-lists);
+        # an ordinary entry is a flat list of signature dicts.
+        elif isinstance(signatures_list[file_type][0], list):
             matched_length = inspect_multi_condition_signature(header_bytes=header_bytes, multi_signatures=signatures_list[file_type])
             
             if matched_length is not None and matched_length > detected_ext_length:
