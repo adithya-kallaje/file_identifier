@@ -26,7 +26,10 @@
         {"offset": 0, "signature": "89504e470d0a1a0a"}
     ],
     "webp": [
-        {"offset": 8, "signature": "57454250"}
+        [
+            {"offset": 0, "signature": "52494646"},
+            {"offset": 8, "signature": "57454250"}
+        ]
     ],
     "ico": [
         {"offset": 0, "signature": "00000100"}
@@ -148,7 +151,10 @@
         {"offset": 0, "signature": "000001ba"}
     ],
     "avi": [
-        {"offset": 8, "signature": "415649204c495354"}
+        [
+            {"offset": 0, "signature": "52494646"},
+            {"offset": 8, "signature": "41564920"}
+        ]
     ],
     "mkv": [
         {"offset": 0, "signature": "1a45dfa3"}
@@ -308,8 +314,10 @@
         {"offset": 0, "signature": "63616666"}
     ],
     "wav": [
-        {"offset": 0, "signature": "52494646"},
-        {"offset": 0, "signature": "57415645"}
+        [
+            {"offset": 0, "signature": "52494646"},
+            {"offset": 8, "signature": "57415645"}
+        ]
     ],
     "avr": [
         {"offset": 0, "signature": "32424954"}

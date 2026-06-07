@@ -1,7 +1,5 @@
 import json
 from pathlib import Path
-import text_parser
-import re
 from zipfile import ZipFile
 from zipfile import BadZipFile
 import olefile
@@ -9,6 +7,8 @@ import magic
 import argparse
 from dataclasses import dataclass
 
+import text_parser
+import magic_bytes_inspection
 
 MIMETYPE_MAP = {                                                                                                                                                           
     "application/epub+zip": "epub",                                                                                                                                        
@@ -103,27 +103,6 @@ def normalize_extension(extension: str, aliases_list: dict) -> str:
         if 'aliases' in extensions and extension in extensions['aliases']:
             return extensions['canonical']
     return extension
-
-
-def inspect_magic_bytes(header_bytes: bytes, signatures_list: dict) -> str | None:
-    '''Match file header bytes against known signatures; returns longest/most-specific match.'''
-    detected_ext = None
-    detected_ext_length = 0
-    
-    # Iterate through all file types
-    for file_type in signatures_list:
-        if file_type.startswith('__'): continue
-        
-        for signature in signatures_list[file_type]:
-            header_offset = signature["offset"] * 2
-            matching_signatures = '.' * header_offset + signature["signature"]
-            
-            if re.match(matching_signatures, header_bytes.hex()) and len(matching_signatures) > detected_ext_length:
-                detected_ext = file_type
-                detected_ext_length = len(matching_signatures)
-
-    
-    return detected_ext
 
 
 def inspect_zip_container(file_path: str) -> str | None:
@@ -264,7 +243,7 @@ def identify_file_type(file_path: str, dataset: Datasets) -> Extensions:
     ## File detection
     
     # Check magic bytes
-    actual_extension = inspect_magic_bytes(header_bytes, dataset.signature_list)
+    actual_extension = magic_bytes_inspection.inspect_magic_bytes(header_bytes, dataset.signature_list)
     
     # Check zip container
     if actual_extension == "zip":
@@ -312,7 +291,7 @@ def dispatch_identification(input: UserInput, dataset:Datasets) -> None:
         for item_path in Path(path).iterdir():
             file_extension = identify_file_type(file_path=item_path, dataset=dataset)
             file_verdicts.append(dir_output(file_extension=file_extension, file_path=item_path))
-            
+        
         if input.write_output:
             try:
                 with open(file=input.write_output, mode="w") as output_file: 
@@ -340,9 +319,9 @@ def get_input() -> UserInput:
     args = parser.parse_args()
     
     input = UserInput(
-        file_path= args.file if args.file else args.directory,
-        input_type= 'file' if args.file else 'directory',
-        write_output= args.output_file
+        file_path = args.file if args.file else args.directory,
+        input_type = 'file' if args.file else 'directory',
+        write_output = args.output_file
     )
     
     return input
