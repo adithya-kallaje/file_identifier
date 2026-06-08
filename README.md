@@ -6,8 +6,8 @@ A command-line tool that detects a file's **real** type by inspecting its conten
 
 - Python 3.10+ (uses `str | None` union syntax)
 - Third-party packages:
-  - [python-magic](https://pypi.org/project/python-magic/) — libmagic bindings (the `magic` import)
-  - [olefile](https://pypi.org/project/olefile/) — OLE2 container inspection
+  - [python-magic](https://pypi.org/project/python-magic/) - libmagic bindings (the `magic` import)
+  - [olefile](https://pypi.org/project/olefile/) - OLE2 container inspection
 
 ```bash
 pip install python-magic olefile
@@ -19,13 +19,13 @@ pip install python-magic olefile
 ## Usage
 
 ```bash
-# Single file — verbose result
+# Single file - verbose result
 python3 file_identifier.py -f test_files/image.jpg
 
-# Whole directory — batch table to stdout
+# Whole directory - batch table to stdout
 python3 file_identifier.py -d test_files/
 
-# Whole directory — write the batch table to a file
+# Whole directory - write the batch table to a file
 python3 file_identifier.py -d test_files/ -o reports/result.txt
 ```
 
@@ -35,7 +35,7 @@ python3 file_identifier.py -d test_files/ -o reports/result.txt
 | `-d`, `--directory` | Identify every file in a directory (table output). |
 | `-o`, `--output_file` | Write batch results to a file instead of stdout (only meaningful with `-d`). |
 
-`-f` and `-d` are a **required, mutually exclusive** group — exactly one must be given.
+`-f` and `-d` are a **required, mutually exclusive** group - exactly one must be given.
 
 ## Example output
 
