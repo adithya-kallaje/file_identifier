@@ -41,53 +41,11 @@ python3 file_identifier.py -d test_files/ -o reports/result.txt
 
 **Single file (`-f`):**
 
-![File Identifier flagging a .jpg whose contents are actually a shell script](assets/demo.png)
+![File Identifier flagging a .jpg whose contents are actually a shell script](assets/demo_single.png)
 
-**Batch (`-d`):** one aligned row per file with columns `FILE PATH`, `CLAIMED EXT`, `ACTUAL EXT`, and an `OUTPUT` verdict (`Extensions match`, `MISMATCH`, `Could Not Identify File extension`, or `No file extension`).
+**Batch (`-d`):** 
 
-## How detection works
-
-`identify_file_type()` runs each file through a pipeline, stopping as soon as the detected type agrees with the (alias-normalized) claimed type:
-
-1. **Magic-byte signatures** (`magic_bytes_inspection.inspect_magic_bytes`) — matches the header against `data/file_signatures.json`. The longest / most-specific match wins.
-2. **Container inspection** — if the magic bytes resolve to a generic container:
-   - `zip` → `inspect_zip_container()` distinguishes `docx`, `xlsx`, `epub`, `odt`, etc. by reading the archive's mimetype entry and internal paths.
-   - `doc` (OLE2) → `inspect_ole_container()` distinguishes `doc`, `xls`, `ppt` by their internal directory entries.
-3. **libmagic fallback** (`use_magic_lib`) — when signatures are inconclusive, matches the libmagic description against `data/magic_values.json`.
-4. **Text-content parsing** (`text_parser.text_based_format_detection`) — for readable text, sniffs `json`, `csv`, `html`, `xml` (and `kml` / `svg` via XML namespace), defaulting to `txt`.
-
-Finally the claimed extension is normalized through `data/extension_aliases.json` (e.g. `jpg → jpeg`, `dng → tiff`) and compared against the detected type.
-
-## Signature format (`data/file_signatures.json`)
-
-Each entry maps a file type to a list of conditions. A condition is `{"offset": <byte offset>, "signature": "<hex>"}`.
-
-**Single-signature entries** — a flat list; the file matches if *any* condition matches (OR):
-
-```json
-"png": [
-    {"offset": 0, "signature": "89504e470d0a1a0a"}
-],
-"tiff": [
-    {"offset": 0, "signature": "49492a00"},
-    {"offset": 0, "signature": "4d4d002a"}
-]
-```
-
-**Multi-condition entries** — a list **of lists** (variations). Within a variation all conditions must match (AND); across variations any may match (OR). Used for formats identifiable only by multiple markers at different offsets — the RIFF family (`wav`, `avi`, `webp`), where RIFF@0 is shared and the form-type at offset 8 decides:
-
-```json
-"webp": [
-    [
-        {"offset": 0, "signature": "52494646"},
-        {"offset": 8, "signature": "57454250"}
-    ]
-]
-```
-
-The branch is chosen **structurally** at runtime (`isinstance(entry[0], list)`), so no hardcoded type list is needed. Matches are scored by the **sum of matched signature bytes**, letting single- and multi-condition entries compete fairly so the most specific type always wins.
-
-Keys beginning with `__` (e.g. `__comment_image`) are treated as comments and skipped.
+![File Identifier run on an entire directory](assets/demo_batch.png)
 
 ## Supporting data files
 
